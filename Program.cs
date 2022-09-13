@@ -48,39 +48,39 @@ public class Pawn : Piece
             int intCurrentY = Convert.ToInt32(Position[1] - 49);
 
             //target position
-           int xPosInt = Utilities.char2Int(xPos);
-           int yPosInt = yPos - 1;
+            int xPosInt = Utilities.char2Int(xPos);
+            int yPosInt = yPos - 1;
 
-           Piece p_targ = b.getPieceAt(xPos, yPos);
-            
-           //allow for starting positon "jump" for white pawns
-           if (Color == "White" && intCurrentY == 6 && Math.Abs(yPosInt - intCurrentY) == 2)
-               return true;
-           //allow for starting positon "jump" for black pawns
-           else if (Color == "Black" && intCurrentY == 1 && Math.Abs(yPosInt - intCurrentY) == 2)
-               return true;
-           //there should always be a unitary move in the vertical direction
-           else if (Math.Abs(yPosInt - intCurrentY) != 1)
-               return false;
-           //out of bounds
-           else if (yPosInt > 7 || yPosInt < 1)
-               return false;
-           else if(p_targ == null)
-               //no horizontal movement allowed, diagonal movememnt allowed only for !=null target
-               if (Math.Abs(intCurrentX - xPosInt) == 1)
-                   return false;
-               else
-                   return true;
-           //not allow horizontal jumps > 1 or movements to already occupied cells of the same color
-           else if(Math.Abs(intCurrentX - xPosInt) != 1 || Color == p_targ.getColor())
-               return false;
-           //filter illegal moves towards the wrong direction
-           else if (Color == "White" && yPosInt - intCurrentY >= 0)
-               return false;
-           else if (Color == "Black" && yPosInt - intCurrentY <= 0)
-               return false;
-           else
-               return true;
+            Piece p_targ = b.getPieceAt(xPos, yPos);
+
+            //allow for starting positon "jump" for white pawns
+            if (Color == "White" && intCurrentY == 6 && Math.Abs(yPosInt - intCurrentY) == 2)
+                return true;
+            //allow for starting positon "jump" for black pawns
+            else if (Color == "Black" && intCurrentY == 1 && Math.Abs(yPosInt - intCurrentY) == 2)
+                return true;
+            //there should always be a unitary move in the vertical direction
+            else if (Math.Abs(yPosInt - intCurrentY) != 1)
+                return false;
+            //out of bounds
+            else if (yPosInt > 7 || yPosInt < 1)
+                return false;
+            //filter illegal moves towards the wrong direction
+            else if (Color == "White" && yPosInt - intCurrentY >= 0)
+                return false;
+            else if (Color == "Black" && yPosInt - intCurrentY <= 0)
+                return false;
+            else if (p_targ == null)
+                //no horizontal movement allowed, diagonal movememnt allowed only for !=null target
+                if (Math.Abs(intCurrentX - xPosInt) == 1)
+                    return false;
+                else
+                    return true;
+            //not allow horizontal jumps > 1 or movements to already occupied cells of the same color
+            else if (Math.Abs(intCurrentX - xPosInt) != 1 || Color == p_targ.getColor())
+                return false;
+            else
+                return true;
         }
     }
 
@@ -416,6 +416,7 @@ public class Pawn : Piece
 
                 origIn = Console.ReadLine();
                 xOrig = origIn[0];
+                //ranges from [0,..,7]
                 yOrig = Convert.ToInt32(origIn[1] - 48);
 
                 Console.WriteLine("Please enter the coordinates of the cell");
@@ -426,19 +427,31 @@ public class Pawn : Piece
                 xDest = destIn[0];
                 yDest = Convert.ToInt32(destIn[1] - 48);
 
+                if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 0 || yOrig > 7)
+                    p_select = null;
+                else
+                    p_select = b.getPieceAt(xOrig, yOrig);
+
                 while (p_select == null || Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 0 || yOrig > 7)
                 {
+                    Console.WriteLine(xOrig);
+                    Console.WriteLine(yOrig);
                     Console.WriteLine("Empty selection or selection out of bounds!");
                     Console.WriteLine("Enter a valid position on the chessboard:");
                     Console.WriteLine("__________________________________________");
                     origIn = Console.ReadLine();
                     xOrig = origIn[0];
                     yOrig = Convert.ToInt32(origIn[1] - 48);
+                    if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 0 || yOrig > 7)
+                    {
+                        p_select = null;
+                    }
+                    
+                    else
+                        p_select = b.getPieceAt(xOrig, yOrig);
                 }
 
-                p_select = b.getPieceAt(xOrig, yOrig);
-
-                if (p_select.isLegalMove(xDest, yDest, b) && p_select.Color == name)
+                if (p_select.isLegalMove(xDest, yDest, b) && p_select.Color == name) 
                 {
                     b.movePieceAt(xOrig, yOrig, xDest, yDest);
                     b.printBoard();
