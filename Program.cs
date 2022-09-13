@@ -369,6 +369,9 @@ public class Pawn : Piece
 
         public static void playChess()
         {
+            //this field flags if its the black or white players turn
+            var turn = true;
+
             ChessBoard b = new ChessBoard();
             Console.WriteLine("EMPTY BOARD");
             b.printBoard();
@@ -379,11 +382,24 @@ public class Pawn : Piece
             b.loadBoard();
             b.printBoard();
 
-            ChessEngine.nextMove(b, true);
+            while (true)
+            {
+                ChessEngine.nextMove(b, turn);
+                turn = !turn;
+            }
+            
         }
 
         public static void nextMove(ChessBoard b, bool turn)
         {
+            //variables for storing the inputs 
+            string OrigInput ="";
+            string DestInput ="";
+
+            //boolean expression for inputs
+            Boolean isOrigInputValid = false;
+            Boolean isDestInputValid = false;
+
             //origin input coordinates as a string if the form "A4"
             string origIn;
             //variables for storing a char & an int after parsing the string
@@ -403,69 +419,109 @@ public class Pawn : Piece
             else
                 name = "Black";
 
-            Piece p_select = null;
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine($"{name}'s turn!");
+            Console.WriteLine("__________________________________________");
 
-            while (p_select == null)
+            while (isOrigInputValid == false)
             {
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine($"{name}'s turn!");
                 Console.WriteLine("Please enter the coordinates of the piece");
                 Console.WriteLine("you would like to move (ex. of format A2):");
                 Console.WriteLine("__________________________________________");
 
                 origIn = Console.ReadLine();
-                xOrig = origIn[0];
-                //ranges from [0,..,7]
-                yOrig = Convert.ToInt32(origIn[1] - 48);
-
-                Console.WriteLine("Please enter the coordinates of the cell");
-                Console.WriteLine("you would like to move your piece to:");
-                Console.WriteLine("__________________________________________");
-
-                destIn = Console.ReadLine();
-                xDest = destIn[0];
-                yDest = Convert.ToInt32(destIn[1] - 48);
-
-                if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 0 || yOrig > 7)
-                    p_select = null;
-                else
-                    p_select = b.getPieceAt(xOrig, yOrig);
-
-                while (p_select == null || Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 0 || yOrig > 7)
+                //perform a basic input validity scan
+                if (origIn.Length != 2)
                 {
-                    Console.WriteLine(xOrig);
-                    Console.WriteLine(yOrig);
-                    Console.WriteLine("Empty selection or selection out of bounds!");
-                    Console.WriteLine("Enter a valid position on the chessboard:");
+                    Console.WriteLine("Input should be 2 characters long.");
                     Console.WriteLine("__________________________________________");
-                    origIn = Console.ReadLine();
+                }
+                else
+                {
                     xOrig = origIn[0];
+                    //ranges from [1,..,8]
                     yOrig = Convert.ToInt32(origIn[1] - 48);
-                    if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 0 || yOrig > 7)
+                    if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 1 || yOrig > 8)
                     {
-                        p_select = null;
+                        Console.WriteLine("Input is invalid.");
+                        Console.WriteLine("__________________________________________");
+
                     }
-                    
                     else
-                        p_select = b.getPieceAt(xOrig, yOrig);
-                }
+                    {
+                        if (b.getPieceAt(xOrig, yOrig) == null)
+                        {
+                            Console.WriteLine("The cell you have selected is empty.");
+                            Console.WriteLine("__________________________________________");
+                        }
 
-                if (p_select.isLegalMove(xDest, yDest, b) && p_select.Color == name) 
-                {
-                    b.movePieceAt(xOrig, yOrig, xDest, yDest);
-                    b.printBoard();
-                    ChessEngine.nextMove(b, !turn);
-                }
-                else
-                {
-                    Console.WriteLine("The move you have selected was not valid!"); 
-                    Console.WriteLine("Please try again!");
-                    Console.WriteLine("__________________________________________");
-
-                    ChessEngine.nextMove(b, turn);
+                        else
+                        {
+                            if (b.getPieceAt(xOrig, yOrig).Color != name)
+                            {
+                                Console.WriteLine($"Select a {name} piece.");
+                                Console.WriteLine("__________________________________________");
+                            }
+                            else
+                            {
+                                isOrigInputValid = true;
+                                OrigInput = origIn;
+                            }
+                        }
+                    }
                 }
             }
+
+            xOrig = OrigInput[0];
+            //ranges from [1,..,8]
+            yOrig = Convert.ToInt32(OrigInput[1] - 48);
+
+            Piece p_select = b.getPieceAt(xOrig, yOrig);
+
+            Console.WriteLine("Please enter the coordinates of the cell");
+            Console.WriteLine("you would like to move your piece to:");
+            Console.WriteLine("__________________________________________");
+
+            while (isDestInputValid == false)
+            {
+                destIn = Console.ReadLine();
+                //perform a basic input validity scan
+                if (destIn.Length != 2)
+                {
+                    Console.WriteLine("Input should be 2 characters long.");
+                    Console.WriteLine("__________________________________________");
+                }
+                else
+                {
+                    xDest = destIn[0];
+                    //ranges from [1,..,8]
+                    yDest = Convert.ToInt32(destIn[1] - 48);
+                    if (Utilities.char2Int(xDest) < 0 || Utilities.char2Int(xDest) > 7 || yDest < 1 || yDest > 8)
+                    {
+                        Console.WriteLine("Input is invalid.");
+                        Console.WriteLine("__________________________________________");
+                    }
+                    else
+                    {
+                        if (p_select.isLegalMove(xDest, yDest, b))
+                        {
+                            isDestInputValid = true;
+                            DestInput = destIn;
+                        }
+                    }
+                }
+            }
+
+            xDest = DestInput[0];
+            //ranges from [1,..,8]
+            yDest = Convert.ToInt32(DestInput[1] - 48);
+
+            b.movePieceAt(xOrig, yOrig, xDest, yDest);
+            b.printBoard();
+
+            Console.WriteLine("");
+            Console.WriteLine("Next player's turn!");
         }
     }
 
