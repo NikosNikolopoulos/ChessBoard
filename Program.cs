@@ -479,12 +479,12 @@ public class Pawn : Piece
 
             Piece p_select = b.getPieceAt(xOrig, yOrig);
 
-            Console.WriteLine("Please enter the coordinates of the cell");
-            Console.WriteLine("you would like to move your piece to:");
-            Console.WriteLine("__________________________________________");
-
             while (isDestInputValid == false)
             {
+                Console.WriteLine("Please enter the coordinates of the cell");
+                Console.WriteLine("you would like to move your piece to:");
+                Console.WriteLine("__________________________________________");
+
                 destIn = Console.ReadLine();
                 //perform a basic input validity scan
                 if (destIn.Length != 2)
