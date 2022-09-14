@@ -1,11 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+
+public enum Colors
+{
+    White, Black    //0, 1
+}
+public enum BoardCoordinates
+{
+    A1,A2,A3,A4,A5,A6,A7,A8,    // 0,..., 7,
+    B1,B2,B3,B4,B5,B6,B7,B8,    // 8,...,15,
+    C1,C2,C3,C4,C5,C6,C7,C8,    //16,...,23,
+    D1,D2,D3,D4,D5,D6,D7,D8,    //24,...,31,
+    E1,E2,E3,E4,E5,E6,E7,E8,    //32,...,39,
+    F1,F2,F3,F4,F5,F6,F7,F8,    //40,...,47,
+    G1,G2,G3,G4,G5,G6,G7,G8,    //48,...,55,
+    H1,H2,H3,H4,H5,H6,H7,H8     //56,...,63
+}
 
 namespace ChessBoard
 {
     //abstract class that all chessboard pieces should inherit
     public abstract class Piece
     {
-        public string Color = "NoColor";
+        public string Color;
         public char Kind;
         public string Position;
 
@@ -54,10 +71,10 @@ public class Pawn : Piece
             Piece p_targ = b.getPieceAt(xPos, yPos);
 
             //allow for starting positon "jump" for white pawns
-            if (Color == "White" && intCurrentY == 6 && Math.Abs(yPosInt - intCurrentY) == 2)
+            if (Color == "Black" && intCurrentY == 6 && Math.Abs(yPosInt - intCurrentY) == 2)
                 return true;
             //allow for starting positon "jump" for black pawns
-            else if (Color == "Black" && intCurrentY == 1 && Math.Abs(yPosInt - intCurrentY) == 2)
+            else if (Color == "White" && intCurrentY == 1 && Math.Abs(yPosInt - intCurrentY) == 2)
                 return true;
             //there should always be a unitary move in the vertical direction
             else if (Math.Abs(yPosInt - intCurrentY) != 1)
@@ -66,12 +83,12 @@ public class Pawn : Piece
             else if (yPosInt > 7 || yPosInt < 1)
                 return false;
             //filter illegal moves towards the wrong direction
-            else if (Color == "White" && yPosInt - intCurrentY >= 0)
+            else if (Color == "Black" && yPosInt - intCurrentY >= 0)
                 return false;
-            else if (Color == "Black" && yPosInt - intCurrentY <= 0)
+            else if (Color == "White" && yPosInt - intCurrentY <= 0)
                 return false;
             else if (p_targ == null)
-                //no horizontal movement allowed, diagonal movememnt allowed only for !=null target
+                //no horizontal movement allowed, diagonal movement allowed only for !=null target
                 if (Math.Abs(intCurrentX - xPosInt) == 1)
                     return false;
                 else
@@ -184,151 +201,121 @@ public class Pawn : Piece
         }
     }
 
-    //ilustrates a chess board
+    //ilustrates a chess Board
     public class ChessBoard
     {
-        public Piece[,] board = new Piece [8, 8];
+        private Dictionary<string, Piece> Board = new Dictionary<string, Piece>();
 
         public void placePieceAt(Piece p, char xPos, int yPos)
         {
-            board[xPos, yPos] = p;
+            Board[xPos + "" + yPos] = p;
         }
 
         public Piece getPieceAt(char xPos, int yPos)
         {
-            int xPosInt = Utilities.char2Int(xPos);
-            int yPosInt = yPos - 1;
-            return board[xPosInt, yPosInt];
+            return Board[xPos + "" + yPos];
         }
 
         public void movePieceAt(char xOrig, int yOrig, char xDest, int yDest)
         {
-            int xOrigInt = Utilities.char2Int(xOrig);
-            int yOrigInt = yOrig - 1;
+            Piece movingPiece = Board[xOrig + "" + yOrig];
+            movingPiece.Position = xDest + "" + yDest;
 
-            int xDestInt = Utilities.char2Int(xDest);
-            int yDestInt = yDest - 1;
-
-            Piece movingPiece = board[xOrigInt, yOrigInt];
-            movingPiece.Position = "" + xDest + yDest;
-
-            board[xOrigInt, yOrigInt] = null;
-            board[xDestInt, yDestInt] = movingPiece;
+            Board[xOrig + "" + yOrig] = null;
+            Board[xDest + "" + yDest] = movingPiece;
         }
 
-        //responsible for initialising the chess board with every piece in position
-        public void loadBoard()
+        //responsible for initialising the chess Board with every piece in position
+        public void initialiseBoard()
         {
-            //Create 8 x Black Pawns in their spawning positions
-            Pawn P1 = new Pawn("Black", "A2",'p');
-            board[0,1] = P1;
-            Pawn P2 = new Pawn("Black", "B2",'p');
-            board[1,1] = P2;
-            Pawn P3 = new Pawn("Black", "C2",'p');
-            board[2,1] = P3;
-            Pawn P4 = new Pawn("Black", "D2",'p');
-            board[3,1] = P4;
-
-            Pawn P5 = new Pawn("Black", "E2",'p');
-            board[4,1] = P5;
-            Pawn P6 = new Pawn("Black", "F2",'p');
-            board[5,1] = P6;
-            Pawn P7 = new Pawn("Black", "G2",'p');
-            board[6,1] = P7;
-            Pawn P8 = new Pawn("Black", "H2",'p');
-            board[7,1] = P8;
+            //Create 8 x White Pawns in their spawning positions
+            Board.Add("A2", new Pawn("White", "A2",'P'));
+            Board.Add("B2", new Pawn("White", "B2",'P'));
+            Board.Add("C2", new Pawn("White", "C2",'P'));
+            Board.Add("D2", new Pawn("White", "D2",'P'));
+            Board.Add("E2", new Pawn("White", "E2",'P'));
+            Board.Add("F2", new Pawn("White", "F2",'P'));
+            Board.Add("G2", new Pawn("White", "G2",'P'));
+            Board.Add("H2", new Pawn("White", "H2",'P'));
 
             //Create 2 x Black Rooks in their spawning positions
-            Rook R1 = new Rook("Black", "A1",'r');
-            board[0,0] = R1;
-            Rook R2 = new Rook("Black", "H1",'r');
-            board[7,0] = R2;
+            Board.Add("A1", new Rook("White", "A1",'R'));
+            Board.Add("H1", new Rook("White", "H1",'R'));
 
             //Create 2 x Black Knights in their spawning positions
-            Knight H1 = new Knight("Black", "B1",'h');
-            board[1,0] = H1;
-            Knight H2 = new Knight("Black", "G1",'h');
-            board[6,0] = H2;
+            Board.Add("B1", new Knight("White", "B1",'H'));
+            Board.Add("G1", new Knight("White", "G1",'H'));
 
             //Create 2 x Black Bishops in their spawning positions
-            Bishop B1 = new Bishop("Black", "C1",'b');
-            board[2,0] = B1;
-            Bishop B2 = new Bishop("Black", "F1",'b');
-            board[5,0] = B2;
+            Board.Add("C1", new Bishop("White", "C1",'B'));
+            Board.Add("F1", new Bishop("White", "F1",'B'));
 
             //Create 1 x Black King in his spawning position
-            King K = new King("Black", "E1",'k');
-            board[4,0] = K;
+            Board.Add("E1", new King("White", "E1",'K'));
 
             //Create 1 x Black Queen in her spawning position
-            Queen Q = new Queen("Black", "D1",'q');
-            board[3,0] = Q;
+            Board.Add("D1", new Queen("White", "D1",'Q'));
 
             /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-            //Create 8 x White Pawns in their spawning positions
-            Pawn p1 = new Pawn("White", "A7",'P');
-            board[0,6] = p1;
-            Pawn p2 = new Pawn("White", "B7",'P');
-            board[1,6] = p2;
-            Pawn p3 = new Pawn("White", "C7",'P');
-            board[2,6] = p3;
-            Pawn p4 = new Pawn("White", "D7",'P');
-            board[3,6] = p4;
+            //Create 8 x Black Pawns in their spawning positions
+            Board.Add("A7", new Pawn("Black", "A7",'p'));
+            Board.Add("B7", new Pawn("Black", "B7",'p'));
+            Board.Add("C7", new Pawn("Black", "C7",'p'));
+            Board.Add("D7", new Pawn("Black", "D7",'p'));
 
-            Pawn p5 = new Pawn("White", "E7",'P');
-            board[4,6] = p5;
-            Pawn p6 = new Pawn("White", "F7",'P');
-            board[5,6] = p6;
-            Pawn p7 = new Pawn("White", "G7",'P');
-            board[6,6] = p7;
-            Pawn p8 = new Pawn("White", "H7",'P');
-            board[7,6] = p8;
+            Board.Add("E7", new Pawn("Black", "E7",'p'));
+            Board.Add("F7", new Pawn("Black", "F7",'p'));
+            Board.Add("G7", new Pawn("Black", "G7",'p'));
+            Board.Add("H7", new Pawn("Black", "H7",'p'));
 
             //Create 2 x White Rooks in their spawning positions
-            Rook r1 = new Rook("White", "A8",'R');
-            board[0,7] = r1;
-            Rook r2 = new Rook("White", "H8",'R');
-            board[7,7] = r2;
+            Board.Add("A8", new Rook("Black", "A8",'r'));
+            Board.Add("H8", new Rook("Black", "H8",'r'));
 
             //Create 2 x White Knights in their spawning positions
-            Knight h1 = new Knight("White", "B8",'H');
-            board[1,7] = h1;
-            Knight h2 = new Knight("White", "G8",'H');
-            board[6,7] = h2;
+            Board.Add("B8", new Knight("Black", "B8",'h'));
+            Board.Add("G8", new Knight("Black", "G8",'h'));
 
             //Create 2 x White Bishops in their spawning positions
-            Bishop b1 = new Bishop("White", "C8",'B');
-            board[2,7] = b1;
-            Bishop b2 = new Bishop("White", "F8",'B');
-            board[5,7] = b2;
+            Board.Add("C8", new Bishop("Black", "C8",'b'));
+            Board.Add("F8", new Bishop("Black", "F8",'b'));
 
             //Create 1 x White King in his spawning position
-            King k = new King("White", "E8",'K');
-            board[4,7] = k;
+            Board.Add("E8", new King("Black", "E8",'k'));
 
             //Create 1 x White Queen in her spawning position
-            Queen q = new Queen("White", "D8",'Q');
-            board[3,7] = q;
+            Board.Add("D8", new Queen("Black", "D8",'Q'));
+
+            //fill the rest of the slots with null object
+            string[] Coordinates = Enum.GetNames(typeof(BoardCoordinates));
+
+            foreach (string Coordinate in Coordinates)
+                Board.TryAdd(Coordinate, null);
         }
 
         public void printBoard()
         {
-            Console.WriteLine("    A   B   C   D   E   F   G   H");
-            Console.Write("   ___ ___ ___ ___ ___ ___ ___ ___");
-            for (int i = 1; i < 9; i++)
+            char[] Letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+            int[] Numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            Console.WriteLine("   A   B   C   D   E   F   G   H");
+            Console.WriteLine("  ___ ___ ___ ___ ___ ___ ___ ___");
+            foreach (int Number in Numbers)
             {
-                Console.WriteLine("");
-                Console.Write(i + " ");
-                for (int j = 0; j < 8; j++)
+                foreach (char Letter in Letters)
                 {
-                    if (board[j, i-1] != null)
-                        //Console.WriteLine(i+ " " + j);
-                        Console.Write("|_" + board[j, i-1].getKind() + "_");
+                    if (Letter == 'A')
+                        Console.Write(Number);
+
+                    if (Board[Letter + "" + Number ] != null)
+                        Console.Write("|_" + Board[Letter + "" + Number].getKind() + "_");
                     else
                         Console.Write("|___");
+
+                    if (Letter == 'H')
+                        Console.WriteLine("|");
                 }
-                Console.Write("|");
             }
         }
 
@@ -336,7 +323,7 @@ public class Pawn : Piece
         {
             ChessEngine.playChess();
             //ChessBoard b = new ChessBoard();
-            //ChessBoard.loadBoard();
+            //ChessBoard.initialiseBoard();
             //ChessBoard.movePieceAt('E',8,'E',3);
             //Console.WriteLine(b.getPieceAt('A',7).isLegalMove('A',5,b));
             //ChessBoard.printBoard();
@@ -372,19 +359,17 @@ public class Pawn : Piece
             //this field flags if its the black or white players turn
             var turn = true;
 
-            ChessBoard b = new ChessBoard();
-            Console.WriteLine("EMPTY BOARD");
-            b.printBoard();
+            ChessBoard chessboard = new ChessBoard();
 
             Console.WriteLine("");
             Console.WriteLine("Setting things up ...");
             ChessEngine.printNotation();
-            b.loadBoard();
-            b.printBoard();
+            chessboard.initialiseBoard();
+            chessboard.printBoard();
 
             while (true)
             {
-                ChessEngine.nextMove(b, turn);
+                ChessEngine.nextMove(chessboard, turn);
                 turn = !turn;
             }
             
