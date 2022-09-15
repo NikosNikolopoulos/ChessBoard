@@ -30,7 +30,7 @@ namespace ChessBoard
             else if (Math.Abs(TargetY - CurrentY) != 1)
                 return false;
             //out of bounds
-            else if (TargetY > 7 || TargetY < 1)
+            else if (TargetY > 8 || TargetY < 0)
                 return false;
             //filter illegal moves towards the wrong direction
             else if (Color == "Black" && TargetY - CurrentY >= 0)

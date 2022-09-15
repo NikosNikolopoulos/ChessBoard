@@ -39,35 +39,35 @@ namespace ChessBoard
                 {
                     if (Number == 1)
                         if (Letter == 'A' || Letter == 'H')
-                            Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number, 'R'));
+                            Board.Add(Letter + "" + Number, new Rook("White", Letter + "" + Number, 'R'));
                         else if (Letter == 'B' || Letter == 'G')
-                            Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number, 'H'));
+                            Board.Add(Letter + "" + Number, new Knight("White", Letter + "" + Number, 'H'));
                         else if (Letter == 'C' || Letter == 'F')
-                            Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number, 'B'));
+                            Board.Add(Letter + "" + Number, new Bishop("White", Letter + "" + Number, 'B'));
                         else if (Letter == 'D')
-                            Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number, 'Q'));
+                            Board.Add(Letter + "" + Number, new Queen("White", Letter + "" + Number, 'Q'));
                         else
-                            Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number, 'K'));
+                            Board.Add(Letter + "" + Number, new King("White", Letter + "" + Number, 'K'));
                     else if(Number == 2)
                         Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number,'P'));
                     else if(Number == 7)
                         Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'p'));
                     else if(Number == 8)
                         if (Letter == 'A' || Letter == 'H')
-                            Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'r'));
+                            Board.Add(Letter + "" + Number, new Rook("Black", Letter + "" + Number, 'r'));
                         else if (Letter == 'B' || Letter == 'G')
-                            Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'h'));
+                            Board.Add(Letter + "" + Number, new Knight("Black", Letter + "" + Number, 'h'));
                         else if (Letter == 'C' || Letter == 'F')
-                            Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'b'));
+                            Board.Add(Letter + "" + Number, new Bishop("Black", Letter + "" + Number, 'b'));
                         else if (Letter == 'D')
-                            Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'q'));
+                            Board.Add(Letter + "" + Number, new Queen("Black", Letter + "" + Number, 'q'));
                         else
-                            Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'k'));
+                            Board.Add(Letter + "" + Number, new Knight("Black", Letter + "" + Number, 'k'));
                 }
             }
 
             //fill the rest of the slots with null object
-                    string[] Coordinates = Enum.GetNames(typeof(BoardCoordinates));
+            string[] Coordinates = Enum.GetNames(typeof(BoardCoordinates));
 
             foreach (string Coordinate in Coordinates)
                 Board.TryAdd(Coordinate, null);

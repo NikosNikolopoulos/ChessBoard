@@ -26,19 +26,18 @@ namespace ChessBoard
 
             if (Math.Abs(yPosInt - intCurrentY) != 1 && Math.Abs(intCurrentX - xPosInt) != 1)
                 return false;
-            else if (Math.Abs(yPosInt - intCurrentY) > 1 || Math.Abs(intCurrentX - xPosInt) > 1)
+            if (Math.Abs(yPosInt - intCurrentY) > 1 || Math.Abs(intCurrentX - xPosInt) > 1)
                 return false;
-            else if (yPosInt > 7 || yPosInt < 1)
+            if (yPosInt > 7 || yPosInt < 1)
                 return false;
-            else if (p_targ == null)
+            if (p_targ == null)
                 if (Math.Abs(intCurrentX - xPosInt) > 1 || Math.Abs(intCurrentX - xPosInt) > 1)
                     return false;
                 else
                     return true;
-            else if (Color == p_targ.getColor())
+            if (Color == p_targ.getColor())
                 return false;
-            else
-                return true;
+            return true;
         }
     }
 }
