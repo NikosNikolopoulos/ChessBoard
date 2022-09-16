@@ -30,13 +30,13 @@ namespace ChessBoard
 
             while (isOriginInputValid == false)
             {
-                Console.WriteLine("Please enter the coordinates of the piece\nyou would like to move (ex. of format A2):\n__________________________________________");
+                ApplicationMessage.printDialog(Dialogs.SelectPiece, BlackOrWhite);
 
                 originInput = Console.ReadLine();
                 //perform a basic input validity scan
                 if (originInput.Length != 2)
                 {
-                    Console.WriteLine("Input should be 2 characters long.\n__________________________________________");
+                    ApplicationMessage.printDialog(Dialogs.InvalidLength, BlackOrWhite);
                 }
                 else
                 {
@@ -46,20 +46,20 @@ namespace ChessBoard
 
                     if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 1 || yOrig > 8)
                     {
-                        Console.WriteLine("Input is invalid.\n__________________________________________");
+                        ApplicationMessage.printDialog(Dialogs.InvalidInput, BlackOrWhite);
                     }
                     else
                     {
                         if (chessboard.getPieceAt(xOrig, yOrig) == null)
                         {
-                            Console.WriteLine("The cell you have selected is empty.\n__________________________________________");
+                            ApplicationMessage.printDialog(Dialogs.EmptySelection, BlackOrWhite);
                         }
 
                         else
                         {
                             if (chessboard.getPieceAt(xOrig, yOrig).Color != BlackOrWhite)
                             {
-                                Console.WriteLine($"Select a {BlackOrWhite} piece.\n__________________________________________");
+                                ApplicationMessage.printDialog(Dialogs.WrongColor, BlackOrWhite);
                             }
                             else
                             {
@@ -79,18 +79,19 @@ namespace ChessBoard
 
             while (isDestinationInputValid == false)
             {
-                Console.WriteLine("Please enter the coordinates of the cell\nyou would like to move your piece to:\n__________________________________________");
+                ApplicationMessage.printDialog(Dialogs.SelectDestination);
 
                 destinationInput = Console.ReadLine();
+
                 //perform a basic input validity scan
                 if (destinationInput == "")
                 {
-                    Console.WriteLine("Undoing selection.\n__________________________________________");
-                    checkOriginInput(chessboard, selectedPiece.getColor());
+                    ApplicationMessage.printDialog(Dialogs.UndoSelection);
+                    break;
                 }
                 else if (destinationInput.Length != 2)
                 {
-                    Console.WriteLine("Input should be 2 characters long.\n__________________________________________");
+                    ApplicationMessage.printDialog(Dialogs.InvalidLength);
                 }
                 else
                 {
@@ -99,7 +100,7 @@ namespace ChessBoard
                     int yDest = Convert.ToInt32(destinationInput[1] - 48);
                     if (Utilities.char2Int(xDest) < 0 || Utilities.char2Int(xDest) > 7 || yDest < 1 || yDest > 8)
                     {
-                        Console.WriteLine("Input is invalid.\n__________________________________________");
+                        ApplicationMessage.printDialog(Dialogs.InvalidInput);
                     }
                     else
                     {
@@ -111,7 +112,10 @@ namespace ChessBoard
                 }
             }
 
-            return destinationInput;
+            if (destinationInput == "")
+                return null;
+            else
+                return destinationInput;
         }
 
         public static void nextMove(ChessBoard chessboard, bool isWhitesTurn)
@@ -127,10 +131,10 @@ namespace ChessBoard
             else
                 BlackOrWhite = "Black";
 
-            Console.WriteLine($"\n\n{BlackOrWhite}'s turn!\n__________________________________________");
+            ApplicationMessage.printDialog(Dialogs.NextPlayerColor,BlackOrWhite);
 
             //variables for storing the inputs 
-            string OrigInput = ChessEngine.checkOriginInput(chessboard, BlackOrWhite);
+            string OrigInput = checkOriginInput(chessboard, BlackOrWhite);
 
             xOrig = OrigInput[0];
             //ranges from [1,..,8]
@@ -138,8 +142,22 @@ namespace ChessBoard
 
             Piece selectedPiece = chessboard.getPieceAt(xOrig, yOrig);
 
-            string DestInput = ChessEngine.checkDestinationInput(chessboard, selectedPiece);
+            string DestInput = checkDestinationInput(chessboard, selectedPiece);
 
+            //UNDO input detected
+            while (DestInput == null)
+            {
+                //variables for storing the inputs 
+                OrigInput = checkOriginInput(chessboard, BlackOrWhite);
+                
+                xOrig = OrigInput[0];
+                //ranges from [1,..,8]
+                yOrig = Convert.ToInt32(OrigInput[1] - 48); 
+                
+                selectedPiece = chessboard.getPieceAt(xOrig, yOrig); 
+                DestInput = checkDestinationInput(chessboard, selectedPiece);
+            }
+            
             xDest = DestInput[0];
             //ranges from [1,..,8]
             yDest = Convert.ToInt32(DestInput[1] - 48);
@@ -147,15 +165,19 @@ namespace ChessBoard
             chessboard.movePieceAt(xOrig, yOrig, xDest, yDest);
 
             //if a pawn reaches the finish-line spawn a queen at its place
-            if (yDest == 1 || yDest == 8 && selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p')
+            if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))
+            {
                 if (isWhitesTurn)
-                    chessboard.placePieceAt(new Queen(selectedPiece.getColor(),selectedPiece.getPosition(),'Q'),xDest,yDest);
+                    chessboard.placePieceAt(new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'Q'),
+                        xDest, yDest);
                 else
-                    chessboard.placePieceAt(new Queen(selectedPiece.getColor(), selectedPiece.getPosition(),'q'), xDest, yDest);
+                    chessboard.placePieceAt(new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'q'),
+                        xDest, yDest);
+            }
 
             chessboard.printBoard();
 
-            Console.WriteLine("\nNext player's turn!");
+            ApplicationMessage.printDialog(Dialogs.NextPlayer, BlackOrWhite);
         }
     }
 }

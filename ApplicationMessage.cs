@@ -2,7 +2,20 @@
 
 namespace ChessBoard
 {
-    public class ApplicationMessage
+    public enum Dialogs
+    {
+        SelectPiece,
+        InvalidLength,
+        InvalidInput,
+        EmptySelection,
+        WrongColor,
+        SelectDestination,
+        UndoSelection,
+        NextPlayerColor,
+        NextPlayer
+    }
+
+    public static class ApplicationMessage
     {
         public static void printNotation()
         {
@@ -27,6 +40,44 @@ namespace ChessBoard
                               "\n<  K --> white king    k --> black king   >" +
                               "\n<                                         >" +
                               "\n<=========================================>");
+        }
+
+        public static void printDialog(this Dialogs DialogNumber,string BlackOrWhite = "White")
+        {
+            string MessageToPrint = "";
+
+            switch (DialogNumber)
+            {
+                case Dialogs.SelectPiece:
+                    MessageToPrint = "Please enter the coordinates of the piece\nyou would like to move (ex. of format A2):\n__________________________________________";
+                    break;
+                case Dialogs.InvalidLength:
+                    MessageToPrint = "Input should be 2 characters long.\n__________________________________________";
+                    break;
+                case Dialogs.InvalidInput:
+                    MessageToPrint = "Input is invalid.\n__________________________________________";
+                    break;
+                case Dialogs.EmptySelection:
+                    MessageToPrint = "The cell you have selected is empty.\n__________________________________________";
+                    break;
+                case Dialogs.WrongColor:
+                    MessageToPrint = $"Select a {BlackOrWhite} piece.\n__________________________________________";
+                    break;
+                case Dialogs.SelectDestination:
+                    MessageToPrint = "Please enter the coordinates of the cell\nyou would like to move your piece to:\n__________________________________________";
+                    break;
+                case Dialogs.UndoSelection:
+                    MessageToPrint = "Undoing selection.\n__________________________________________";
+                    break;
+                case Dialogs.NextPlayerColor:
+                    MessageToPrint = $"\n\n{BlackOrWhite}'s turn!\n__________________________________________";
+                    break;
+                case Dialogs.NextPlayer:
+                    MessageToPrint = "\nNext player's turn!";
+                    break;
+            }
+            
+            Console.WriteLine(MessageToPrint);
         }
     }
 }
