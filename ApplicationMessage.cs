@@ -42,7 +42,7 @@ namespace ChessBoard
                               "\n<=========================================>");
         }
 
-        public static void printDialog(this Dialogs DialogNumber,string BlackOrWhite = "White")
+        public static void printDialog(Dialogs DialogNumber,string BlackOrWhite = "White") //TODO remove this
         {
             string MessageToPrint = "";
 

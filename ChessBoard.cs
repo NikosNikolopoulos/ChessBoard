@@ -60,10 +60,8 @@ namespace ChessBoard
                             Board.Add(Letter + "" + Number, new Queen("White", Letter + "" + Number, 'Q'));
                         else
                             Board.Add(Letter + "" + Number, new King("White", Letter + "" + Number, 'K'));
-                    else if(Number == 2)
-                        Board.Add(Letter + "" + Number, new Pawn("White", Letter + "" + Number,'P'));
-                    else if(Number == 7)
-                        Board.Add(Letter + "" + Number, new Pawn("Black", Letter + "" + Number, 'p'));
+                    else if (Number == 2 || Number == 7)
+                        Board.Add(Letter + "" + Number, new Pawn(Number == 2 ? "White":"Black", Letter + "" + Number, 'p'));
                     else if(Number == 8)
                         if (Letter == 'A' || Letter == 'H')
                             Board.Add(Letter + "" + Number, new Rook("Black", Letter + "" + Number, 'r'));
@@ -90,7 +88,8 @@ namespace ChessBoard
             char[] Letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
             int[] Numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-            Console.WriteLine("     A   B   C   D   E   F   G   H\n    ___ ___ ___ ___ ___ ___ ___ ___");
+            Console.WriteLine("     A   B   C   D   E   F   G   H\n" +
+                              "    ___ ___ ___ ___ ___ ___ ___ ___");
             foreach (int Number in Numbers)
             {
                 foreach (char Letter in Letters)
