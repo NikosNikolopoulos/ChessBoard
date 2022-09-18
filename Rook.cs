@@ -29,20 +29,38 @@ namespace ChessBoard
             int CurrentY = Convert.ToInt32(Position[1] - 48);
 
             int HorizontalJump = Math.Abs(CurrentX - TargetX);
-            int VerticalJump = Math.Abs(CurrentX - TargetY);
+            int VerticalJump = Math.Abs(CurrentY - TargetY);
 
             switch (DisplacementType)
             {
                 case (int) RookDisplacementType.Horizontal:
-                    for (int radius = 1; radius<HorizontalJump; radius++)
+                    for (int radius = 1; radius < HorizontalJump; radius++)
                     {
                         if (TargetX > CurrentX)
-                            chessboard.getPieceAt(Utilities.int2Char(CurrentX + radius), CurrentY);
+                        {
+                            if (chessboard.getPieceAt(Utilities.int2Char(Utilities.char2Int(CurrentX) + radius), CurrentY) != null)
+                                return true;
+                        }
+                        else if (TargetX < CurrentX)
+                            if (chessboard.getPieceAt(Utilities.int2Char(Utilities.char2Int(CurrentX) - radius), CurrentY) != null)
+                                return true;
+                    }
+                    break;
+                case (int)RookDisplacementType.Vertical:
+                    for (int radius = 1; radius < VerticalJump; radius++)
+                    {
+                        if (TargetY > CurrentY)
+                        {
+                            if (chessboard.getPieceAt(Position[0], CurrentY + radius) != null)
+                                return true;
+                        }
+                        else if (TargetY < CurrentY)
+                            if (chessboard.getPieceAt(Position[0], CurrentY - radius) != null)
+                                return true;
                     }
                     break;
             }
-
-            return true;
+            return false;
         }
 
         public override bool isLegalMove(char TargetX, int TargetY, ChessBoard chessboard)
@@ -55,6 +73,8 @@ namespace ChessBoard
             Piece pieceAtTargetPosition = chessboard.getPieceAt(TargetX, TargetY);
 
             if ((TargetX != CurrentX && TargetY != CurrentY) || (TargetX == CurrentX && TargetY == CurrentY))
+                return false;
+            if (isPieceInbetween(TargetX, TargetY,TargetX == CurrentX ? (int) RookDisplacementType.Vertical : (int)RookDisplacementType.Horizontal, chessboard))
                 return false;
             return true;
         }

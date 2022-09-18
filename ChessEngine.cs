@@ -44,7 +44,7 @@ namespace ChessBoard
                     //ranges from [1,..,8]
                     int yOrig = Convert.ToInt32(originInput[1] - 48);
 
-                    if (Utilities.char2Int(xOrig) < 0 || Utilities.char2Int(xOrig) > 7 || yOrig < 1 || yOrig > 8)
+                    if (Utilities.char2Int(xOrig) < 1 || Utilities.char2Int(xOrig) > 8 || yOrig < 1 || yOrig > 8)
                     {
                         ApplicationMessage.printDialog(Dialogs.InvalidInput, BlackOrWhite);
                     }
@@ -98,7 +98,7 @@ namespace ChessBoard
                     char xDest = destinationInput[0];
                     //ranges from [1,..,8]
                     int yDest = Convert.ToInt32(destinationInput[1] - 48);
-                    if (Utilities.char2Int(xDest) < 0 || Utilities.char2Int(xDest) > 7 || yDest < 1 || yDest > 8)
+                    if (Utilities.char2Int(xDest) < 1 || Utilities.char2Int(xDest) > 8 || yDest < 1 || yDest > 8)
                     {
                         ApplicationMessage.printDialog(Dialogs.InvalidInput);
                     }
