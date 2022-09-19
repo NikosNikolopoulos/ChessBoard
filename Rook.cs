@@ -18,44 +18,42 @@ namespace ChessBoard
             Kind = k;
         }
 
-        public bool isPieceInbetween(char TargetX, int TargetY, int DisplacementType, ChessBoard chessboard)
+        public bool IsPieceInBetween(char targetX, int targetY, int displacementType, ChessBoard chessboard)
         {
-            char[] Letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
-            int[] Numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
+            char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-            //current position
-            char CurrentX = Position[0];
-            //parsing string and converting second coordinate appropriately
-            int CurrentY = Convert.ToInt32(Position[1] - 48);
+            char currentX = Position[0];                                                                                                                        //current position
+            int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                   //parsing string and converting second coordinate appropriately
 
-            int HorizontalJump = Math.Abs(CurrentX - TargetX);
-            int VerticalJump = Math.Abs(CurrentY - TargetY);
+            int horizontalJump = Math.Abs(currentX - targetX);
+            int verticalJump = Math.Abs(currentY - targetY);
 
-            switch (DisplacementType)
+            switch (displacementType)
             {
                 case (int) RookDisplacementType.Horizontal:
-                    for (int radius = 1; radius < HorizontalJump; radius++)
+                    for (int radius = 1; radius < horizontalJump; radius++)
                     {
-                        if (TargetX > CurrentX)
+                        if (targetX > currentX)
                         {
-                            if (chessboard.getPieceAt(Utilities.int2Char(Utilities.char2Int(CurrentX) + radius), CurrentY) != null)
+                            if (chessboard.getPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY) != null)
                                 return true;
                         }
-                        else if (TargetX < CurrentX)
-                            if (chessboard.getPieceAt(Utilities.int2Char(Utilities.char2Int(CurrentX) - radius), CurrentY) != null)
+                        else if (targetX < currentX)
+                            if (chessboard.getPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY) != null)
                                 return true;
                     }
                     break;
                 case (int)RookDisplacementType.Vertical:
-                    for (int radius = 1; radius < VerticalJump; radius++)
+                    for (int radius = 1; radius < verticalJump; radius++)
                     {
-                        if (TargetY > CurrentY)
+                        if (targetY > currentY)
                         {
-                            if (chessboard.getPieceAt(Position[0], CurrentY + radius) != null)
+                            if (chessboard.getPieceAt(Position[0], currentY + radius) != null)
                                 return true;
                         }
-                        else if (TargetY < CurrentY)
-                            if (chessboard.getPieceAt(Position[0], CurrentY - radius) != null)
+                        else if (targetY < currentY)
+                            if (chessboard.getPieceAt(Position[0], currentY - radius) != null)
                                 return true;
                     }
                     break;
@@ -63,18 +61,20 @@ namespace ChessBoard
             return false;
         }
 
-        public override bool isLegalMove(char TargetX, int TargetY, ChessBoard chessboard)
+        public override bool IsLegalMove(char targetX, int targetY, ChessBoard chessboard)
         {
-            //current position
-            char CurrentX = Position[0];
-            //parsing string and converting second coordinate appropriately
-            int CurrentY = Convert.ToInt32(Position[1] - 48);
+            char currentX = Position[0];                                                                                                                         //current position
+            int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                    //parsing string and converting second coordinate appropriately
 
-            Piece pieceAtTargetPosition = chessboard.getPieceAt(TargetX, TargetY);
+            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
 
-            if ((TargetX != CurrentX && TargetY != CurrentY) || (TargetX == CurrentX && TargetY == CurrentY))
+            if ((targetX != currentX && targetY != currentY) || (targetX == currentX && targetY == currentY))
                 return false;
-            if (isPieceInbetween(TargetX, TargetY,TargetX == CurrentX ? (int) RookDisplacementType.Vertical : (int)RookDisplacementType.Horizontal, chessboard))
+            if (IsPieceInBetween(targetX, targetY,targetX == currentX ? (int) RookDisplacementType.Vertical : (int)RookDisplacementType.Horizontal, chessboard))
+                return false;
+            if (pieceAtTargetPosition == null)
+                return true;
+            if (pieceAtTargetPosition.Color == Color)
                 return false;
             return true;
         }

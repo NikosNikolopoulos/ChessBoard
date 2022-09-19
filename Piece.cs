@@ -1,31 +1,26 @@
 ﻿namespace ChessBoard
 {
-    //abstract class that all chessboard pieces should inherit
-    public abstract class Piece
+    public abstract class Piece                                                                                                                     //abstract class that all chessboard pieces should inherit
     {
         public string Color;
         public char Kind;
         public string Position;
 
-        //returns color
-        public string getColor()
+        public string getColor()                                                                                                                    //returns color
         {
             return Color;
         }
 
-        //returns position
-        public string getPosition()
+        public string getPosition()                                                                                                                 //returns position
         {
             return Position;
         }
 
-        //returns type
-        public char getKind()
+        public char getKind()                                                                                                                       //returns type
         {
             return Kind;
         }
 
-        //stores "YES"=1 if the move is legal and "NO"=0 otherwise
-        public abstract bool isLegalMove(char xPos, int yPos, ChessBoard b);
+        public abstract bool IsLegalMove(char xPos, int yPos, ChessBoard b);                                                                        //stores "YES" = 1 if the move is legal and "NO" = 0 otherwise
     }
 }

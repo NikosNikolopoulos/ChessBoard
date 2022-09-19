@@ -11,16 +11,18 @@ namespace ChessBoard
             Kind = k;
         }
 
-        public override bool isLegalMove(char TargetX, int TargetY, ChessBoard chessboard)
+        public override bool IsLegalMove(char targetX, int targetY, ChessBoard chessboard)
         {
             //current position
-            char CurrentX = Position[0];
+            char currentX = Position[0];
             //parsing string and converting second coordinate appropriately
-            int CurrentY = Convert.ToInt32(Position[1] - 48);
+            int currentY = Convert.ToInt32(Position[1] - 48);
 
-            Piece pieceAtTargetPosition = chessboard.getPieceAt(TargetX, TargetY);
+            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
 
-            if (Math.Abs(CurrentX - TargetX) == 1 && Math.Abs(CurrentY - TargetY) == 2)
+            if (Math.Abs(currentX - targetX) == 1 && Math.Abs(currentY - targetY) == 2)
+                return true;
+            if (Math.Abs(currentX - targetX) == 2 && Math.Abs(currentY - targetY) == 1)
                 return true;
             if (pieceAtTargetPosition != null)
                 if (pieceAtTargetPosition.Color == Color)

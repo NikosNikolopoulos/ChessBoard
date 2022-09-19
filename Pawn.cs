@@ -11,46 +11,37 @@ namespace ChessBoard
             Kind = k;
         }
 
-        public override bool isLegalMove(char TargetX, int TargetY, ChessBoard chessboard)
+        public override bool IsLegalMove(char targetX, int targetY, ChessBoard chessboard)
         {
-            //current position
-            char CurrentX = Position[0];
-            //parsing string and converting second coordinate appropriately
-            int CurrentY = Convert.ToInt32(Position[1] - 48);
+            char currentX = Position[0];                                                                                                                                //current position
+            int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                           //parsing string and converting second coordinate appropriately
 
-            Piece pieceAtTargetPosition = chessboard.getPieceAt(TargetX, TargetY);
+            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
 
-            //allow for starting positon "jump" for white pawns but not over other pawns!!
-            if (Color == "Black" && CurrentY == 7 && Math.Abs(TargetY - CurrentY) == 2)
-                if (pieceAtTargetPosition == null && chessboard.getPieceAt(TargetX, TargetY + 1) == null)
+            if (Color == "Black" && currentY == 7 && Math.Abs(targetY - currentY) == 2)                                                                                 //allow for starting position "jump" for white pawns but not over other pawns!!
+                if (pieceAtTargetPosition == null && chessboard.getPieceAt(targetX, targetY + 1) == null)
                     return true;
                 else
                     return false;
-            //allow for starting positon "jump" for black pawns but not over other pawns!!
-            if (Color == "White" && CurrentY == 2 && Math.Abs(TargetY - CurrentY) == 2)
-                if (pieceAtTargetPosition == null && chessboard.getPieceAt(TargetX, TargetY - 1) == null)
+            if (Color == "White" && currentY == 2 && Math.Abs(targetY - currentY) == 2)                                                                                 //allow for starting position "jump" for black pawns but not over other pawns!!
+                if (pieceAtTargetPosition == null && chessboard.getPieceAt(targetX, targetY - 1) == null)
                     return true;
                 else
                     return false;
-            //there should always be a unitary move in the vertical direction
-            if (Math.Abs(TargetY - CurrentY) != 1)
+            if (Math.Abs(targetY - currentY) != 1)                                                                                                                      //there should always be a unitary move in the vertical direction
                 return false;
-            //out of bounds
-            if (TargetY > 8 || TargetY < 0)
+            if (targetY > 8 || targetY < 0)                                                                                                                             //out of bounds
                 return false;
-            //filter illegal moves towards the wrong direction
-            if (Color == "Black" && TargetY - CurrentY >= 0)
+            if (Color == "Black" && targetY - currentY >= 0)                                                                                                            //filter illegal moves towards the wrong direction
                 return false;
-            if (Color == "White" && TargetY - CurrentY <= 0)
+            if (Color == "White" && targetY - currentY <= 0)
                 return false;
             if (pieceAtTargetPosition == null)
-                //no horizontal movement allowed, diagonal movement allowed only for !=null target
-                if (Math.Abs(CurrentX - TargetX) != 0)
+                if (Math.Abs(currentX - targetX) != 0)                                                                                                                  //no horizontal movement allowed, diagonal movement allowed only for !=null target
                     return false;
                 else
                     return true;
-            //not allow horizontal jumps > 1 or movements to already occupied cells of the same color
-            if (Math.Abs(CurrentX - TargetX) != 1 || Color == pieceAtTargetPosition.getColor())
+            if (Math.Abs(currentX - targetX) != 1 || Color == pieceAtTargetPosition.getColor())                                                                         //not allow horizontal jumps > 1 or movements to already occupied cells of the same color
                 return false;
             return true;
         }

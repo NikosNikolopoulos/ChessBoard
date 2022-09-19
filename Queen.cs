@@ -9,7 +9,7 @@
             Kind = k;
         }
 
-        public override bool isLegalMove(char xPos, int yPos, ChessBoard b)
+        public override bool IsLegalMove(char xPos, int yPos, ChessBoard b)
         {
             return true;
         }

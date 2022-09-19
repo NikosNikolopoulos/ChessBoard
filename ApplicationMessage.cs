@@ -2,8 +2,9 @@
 
 namespace ChessBoard
 {
-    public enum Dialogs
+    public enum Messages
     {
+        Notation,
         SelectPiece,
         InvalidLength,
         InvalidInput,
@@ -17,67 +18,75 @@ namespace ChessBoard
 
     public static class ApplicationMessage
     {
-        public static void printNotation()
+        public static void printMessage(Messages messageNumber, string blackOrWhite = "White")
         {
-            Console.WriteLine("<=========================================>" +
-                              "\n<                 RULES                   >" +
-                              "\n<                                         >" +
-                              "\n< 1.1 CONVENTION                          >" +
-                              "\n<  The white pieces are represented with  >" +
-                              "\n< capital letters whereas the black ones  >" +
-                              "\n< are represented with small letters.     >" +
-                              "\n<                                         >" +
-                              "\n<  To UNDO a piece selection enter \"\" in  >" +
-                              "\n< the destination coordinates field for   >" +
-                              "\n< your selected piece.                    >" +
-                              "\n<                                         >" +
-                              "\n< 1.2 NOTATION                            >" +
-                              "\n<  P --> white pawn    p --> black pawn   >" +
-                              "\n<  R --> white rook    r --> black rook   >" +
-                              "\n<  H --> white knight  h --> black knight >" +
-                              "\n<  B --> white bishop  b --> black bishop >" +
-                              "\n<  Q --> white queen   q --> black queen  >" +
-                              "\n<  K --> white king    k --> black king   >" +
-                              "\n<                                         >" +
-                              "\n<=========================================>");
-        }
+            string msg = "";
 
-        public static void printDialog(Dialogs DialogNumber,string BlackOrWhite = "White") //TODO remove this
-        {
-            string MessageToPrint = "";
-
-            switch (DialogNumber)
+            switch (messageNumber)
             {
-                case Dialogs.SelectPiece:
-                    MessageToPrint = "Please enter the coordinates of the piece\nyou would like to move (ex. of format A2):\n__________________________________________";
+                case Messages.Notation:
+                    msg = "<=========================================>" +
+                         "\n<                 RULES                   >" +
+                         "\n<                                         >" +
+                         "\n< 1.1 CONVENTION                          >" +
+                         "\n<  The white pieces are represented with  >" +
+                         "\n< capital letters whereas the black ones  >" +
+                         "\n< are represented with small letters.     >" +
+                         "\n<                                         >" +
+                         "\n<  To UNDO a piece selection enter \"\" in  >" +
+                         "\n< the destination coordinates field for   >" +
+                         "\n< your selected piece.                    >" +
+                         "\n<                                         >" +
+                         "\n< 1.2 NOTATION                            >" +
+                         "\n<  P --> white pawn    p --> black pawn   >" +
+                         "\n<  R --> white rook    r --> black rook   >" +
+                         "\n<  H --> white knight  h --> black knight >" +
+                         "\n<  B --> white bishop  b --> black bishop >" +
+                         "\n<  Q --> white queen   q --> black queen  >" +
+                         "\n<  K --> white king    k --> black king   >" +
+                         "\n<                                         >" +
+                         "\n<=========================================>";
                     break;
-                case Dialogs.InvalidLength:
-                    MessageToPrint = "Input should be 2 characters long.\n__________________________________________";
+                case Messages.SelectPiece:
+                    msg = "Please enter the coordinates of the piece" +
+                                     "\nyou would like to move (ex. of format A2):" +
+                                     "\n__________________________________________";
                     break;
-                case Dialogs.InvalidInput:
-                    MessageToPrint = "Input is invalid.\n__________________________________________";
+                case Messages.InvalidLength:
+                    msg = "Input should be 2 characters long." +
+                                     "\n__________________________________________";
                     break;
-                case Dialogs.EmptySelection:
-                    MessageToPrint = "The cell you have selected is empty.\n__________________________________________";
+                case Messages.InvalidInput:
+                    msg = "Input is invalid." +
+                                     "\n__________________________________________";
                     break;
-                case Dialogs.WrongColor:
-                    MessageToPrint = $"Select a {BlackOrWhite} piece.\n__________________________________________";
+                case Messages.EmptySelection:
+                    msg = "The cell you have selected is empty." +
+                                     "\n__________________________________________";
                     break;
-                case Dialogs.SelectDestination:
-                    MessageToPrint = "Please enter the coordinates of the cell\nyou would like to move your piece to:\n__________________________________________";
+                case Messages.WrongColor:
+                    msg = $"Select a {blackOrWhite} piece." +
+                                      "\n__________________________________________";
                     break;
-                case Dialogs.UndoSelection:
-                    MessageToPrint = "Undoing selection.\n__________________________________________";
+                case Messages.SelectDestination:
+                    msg = "Please enter the coordinates of the cell" +
+                                     "\nyou would like to move your piece to:" +
+                                     "\n__________________________________________";
                     break;
-                case Dialogs.NextPlayerColor:
-                    MessageToPrint = $"\n\n{BlackOrWhite}'s turn!\n__________________________________________";
+                case Messages.UndoSelection:
+                    msg = "Undoing selection." +
+                                     "\n__________________________________________";
                     break;
-                case Dialogs.NextPlayer:
-                    MessageToPrint = "\nNext player's turn!";
+                case Messages.NextPlayerColor:
+                    msg = $"\n\n{blackOrWhite}'s turn!" +
+                                      "\n__________________________________________";
+                    break;
+                case Messages.NextPlayer:
+                    msg = "\nNext player's turn!";
                     break;
             }
             
-            Console.WriteLine(MessageToPrint);
+            Console.WriteLine(msg);
         }
     }
 }

@@ -4,62 +4,61 @@ namespace ChessBoard
 {
     public class ChessEngine
     {
-        public static void playChess()
+        public static void PlayChess()
         {
-            //this field flags if its the black or white players turn
-            var turn = true;
+            var turn = true;                                                                                                                        //this field flags if its the black or white players turn
 
             ChessBoard chessboard = new ChessBoard();
 
-            ApplicationMessage.printNotation();
+            ApplicationMessage.printMessage(Messages.Notation);
             chessboard.initialiseBoard();
             chessboard.printBoard();
 
             while (true)
             {
-                ChessEngine.nextMove(chessboard, turn);
+                ChessEngine.NextMove(chessboard, turn);
                 turn = !turn;
             }
 
         }
 
-        public static string checkOriginInput(ChessBoard chessboard, string BlackOrWhite)
+        public static string CheckOriginInput(ChessBoard chessboard, string blackOrWhite)
         {
             string originInput = "";
             bool isOriginInputValid = false;
 
             while (isOriginInputValid == false)
             {
-                ApplicationMessage.printDialog(Dialogs.SelectPiece, BlackOrWhite);
+                ApplicationMessage.printMessage(Messages.SelectPiece, blackOrWhite);
 
                 originInput = Console.ReadLine();
-                //perform a basic input validity scan
-                if (originInput.Length != 2)
+                
+                if (originInput.Length != 2)                                                                                                        //perform a basic input validity scan
                 {
-                    ApplicationMessage.printDialog(Dialogs.InvalidLength, BlackOrWhite);
+                    ApplicationMessage.printMessage(Messages.InvalidLength, blackOrWhite);
                 }
                 else
                 {
                     char xOrig = originInput[0];
-                    //ranges from [1,..,8]
-                    int yOrig = Convert.ToInt32(originInput[1] - 48);
+                    
+                    int yOrig = Convert.ToInt32(originInput[1] - 48);                                                                               //ranges from [1,..,8]
 
-                    if (Utilities.char2Int(xOrig) < 1 || Utilities.char2Int(xOrig) > 8 || yOrig < 1 || yOrig > 8)
+                    if (Utilities.Char2Int(xOrig) < 1 || Utilities.Char2Int(xOrig) > 8 || yOrig < 1 || yOrig > 8)
                     {
-                        ApplicationMessage.printDialog(Dialogs.InvalidInput, BlackOrWhite);
+                        ApplicationMessage.printMessage(Messages.InvalidInput, blackOrWhite);
                     }
                     else
                     {
                         if (chessboard.getPieceAt(xOrig, yOrig) == null)
                         {
-                            ApplicationMessage.printDialog(Dialogs.EmptySelection, BlackOrWhite);
+                            ApplicationMessage.printMessage(Messages.EmptySelection, blackOrWhite);
                         }
 
                         else
                         {
-                            if (chessboard.getPieceAt(xOrig, yOrig).Color != BlackOrWhite)
+                            if (chessboard.getPieceAt(xOrig, yOrig).Color != blackOrWhite)
                             {
-                                ApplicationMessage.printDialog(Dialogs.WrongColor, BlackOrWhite);
+                                ApplicationMessage.printMessage(Messages.WrongColor, blackOrWhite);
                             }
                             else
                             {
@@ -72,39 +71,38 @@ namespace ChessBoard
             return originInput;
         }
 
-        public static string checkDestinationInput(ChessBoard chessboard, Piece selectedPiece)
+        public static string CheckDestinationInput(ChessBoard chessboard, Piece selectedPiece)
         {
             string destinationInput = "";
             bool isDestinationInputValid = false;
 
             while (isDestinationInputValid == false)
             {
-                ApplicationMessage.printDialog(Dialogs.SelectDestination);
+                ApplicationMessage.printMessage(Messages.SelectDestination);
 
                 destinationInput = Console.ReadLine();
 
-                //perform a basic input validity scan
-                if (destinationInput == "")
+                if (destinationInput == "")                                                                                                         //perform a basic input validity scan
                 {
-                    ApplicationMessage.printDialog(Dialogs.UndoSelection);
+                    ApplicationMessage.printMessage(Messages.UndoSelection);
                     break;
                 }
-                else if (destinationInput.Length != 2)
+                if (destinationInput.Length != 2)
                 {
-                    ApplicationMessage.printDialog(Dialogs.InvalidLength);
+                    ApplicationMessage.printMessage(Messages.InvalidLength);
                 }
                 else
                 {
                     char xDest = destinationInput[0];
-                    //ranges from [1,..,8]
-                    int yDest = Convert.ToInt32(destinationInput[1] - 48);
-                    if (Utilities.char2Int(xDest) < 1 || Utilities.char2Int(xDest) > 8 || yDest < 1 || yDest > 8)
+                    
+                    int yDest = Convert.ToInt32(destinationInput[1] - 48);                                                                          //ranges from [1,..,8]
+                    if (Utilities.Char2Int(xDest) < 1 || Utilities.Char2Int(xDest) > 8 || yDest < 1 || yDest > 8)
                     {
-                        ApplicationMessage.printDialog(Dialogs.InvalidInput);
+                        ApplicationMessage.printMessage(Messages.InvalidInput);
                     }
                     else
                     {
-                        if (selectedPiece.isLegalMove(xDest, yDest, chessboard))
+                        if (selectedPiece.IsLegalMove(xDest, yDest, chessboard))
                         {
                             isDestinationInputValid = true;
                         }
@@ -112,72 +110,53 @@ namespace ChessBoard
                 }
             }
 
-            if (destinationInput == "")
-                return null;
-            else
-                return destinationInput;
+            return destinationInput == "" ? null : destinationInput;
         }
 
-        public static void nextMove(ChessBoard chessboard, bool isWhitesTurn)
+        public static void NextMove(ChessBoard chessboard, bool isWhitesTurn)
         {
-            //variables for storing a char & an int after parsing the string
-            char xOrig, xDest;
-            int yOrig, yDest;
+            string blackOrWhite = isWhitesTurn ? "White" : "Black";
 
-            //string responsible for storing who is playing next "Black" or "White"
-            string BlackOrWhite;
-            if (isWhitesTurn == true)
-                BlackOrWhite = "White";
-            else
-                BlackOrWhite = "Black";
+            ApplicationMessage.printMessage(Messages.NextPlayerColor,blackOrWhite);
 
-            ApplicationMessage.printDialog(Dialogs.NextPlayerColor,BlackOrWhite);
+            string origInput = CheckOriginInput(chessboard, blackOrWhite);                                                                          //variables for storing the inputs 
 
-            //variables for storing the inputs 
-            string OrigInput = checkOriginInput(chessboard, BlackOrWhite);
+            var xOrig = origInput[0];                                                                                                          //variables for storing a char & an int after parsing the string
 
-            xOrig = OrigInput[0];
-            //ranges from [1,..,8]
-            yOrig = Convert.ToInt32(OrigInput[1] - 48);
+            var yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                         //ranges from [1,..,8]
 
-            Piece selectedPiece = chessboard.getPieceAt(xOrig, yOrig);
+            var selectedPiece = chessboard.getPieceAt(xOrig, yOrig);
 
-            string DestInput = checkDestinationInput(chessboard, selectedPiece);
+            string destInput = CheckDestinationInput(chessboard, selectedPiece);
 
-            //UNDO input detected
-            while (DestInput == null)
+            while (destInput == null)                                                                                                               //UNDO input detected
             {
-                //variables for storing the inputs 
-                OrigInput = checkOriginInput(chessboard, BlackOrWhite);
-                
-                xOrig = OrigInput[0];
-                //ranges from [1,..,8]
-                yOrig = Convert.ToInt32(OrigInput[1] - 48); 
-                
+                origInput = CheckOriginInput(chessboard, blackOrWhite);                                                                             //variables for storing the inputs
+
+                xOrig = origInput[0];
+                yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                         //ranges from [1,..,8]
+
                 selectedPiece = chessboard.getPieceAt(xOrig, yOrig); 
-                DestInput = checkDestinationInput(chessboard, selectedPiece);
+                destInput = CheckDestinationInput(chessboard, selectedPiece);
             }
             
-            xDest = DestInput[0];
-            //ranges from [1,..,8]
-            yDest = Convert.ToInt32(DestInput[1] - 48);
+            var xDest = destInput[0];
+            var yDest = Convert.ToInt32(destInput[1] - 48);                                                                                         //ranges from [1,..,8]
 
             chessboard.movePieceAt(xOrig, yOrig, xDest, yDest);
 
-            //if a pawn reaches the finish-line spawn a queen at its place
-            if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))
+            if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))                                             //if a pawn reaches the finish-line spawn a queen at its place
             {
-                if (isWhitesTurn)
-                    chessboard.placePieceAt(new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'Q'),
-                        xDest, yDest);
-                else
-                    chessboard.placePieceAt(new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'q'),
-                        xDest, yDest);
+                chessboard.placePieceAt(
+                    isWhitesTurn
+                        ? new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'Q')
+                        : new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'q'),
+                    xDest, yDest);
             }
 
             chessboard.printBoard();
 
-            ApplicationMessage.printDialog(Dialogs.NextPlayer, BlackOrWhite);
+            ApplicationMessage.printMessage(Messages.NextPlayer, blackOrWhite);
         }
     }
 }

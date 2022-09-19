@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            ChessEngine.playChess();
+            ChessEngine.PlayChess();
         }
     }
 
