@@ -11,8 +11,8 @@ namespace ChessBoard
             ChessBoard chessboard = new ChessBoard();
 
             ApplicationMessage.printMessage(Messages.Notation);
-            chessboard.initialiseBoard();
-            chessboard.printBoard();
+            chessboard.InitialiseBoard();
+            chessboard.PrintBoard();
 
             while (true)
             {
@@ -49,14 +49,14 @@ namespace ChessBoard
                     }
                     else
                     {
-                        if (chessboard.getPieceAt(xOrig, yOrig) == null)
+                        if (chessboard.GetPieceAt(xOrig, yOrig) == null)
                         {
                             ApplicationMessage.printMessage(Messages.EmptySelection, blackOrWhite);
                         }
 
                         else
                         {
-                            if (chessboard.getPieceAt(xOrig, yOrig).Color != blackOrWhite)
+                            if (chessboard.GetPieceAt(xOrig, yOrig).Color != blackOrWhite)
                             {
                                 ApplicationMessage.printMessage(Messages.WrongColor, blackOrWhite);
                             }
@@ -125,7 +125,7 @@ namespace ChessBoard
 
             var yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                         //ranges from [1,..,8]
 
-            var selectedPiece = chessboard.getPieceAt(xOrig, yOrig);
+            var selectedPiece = chessboard.GetPieceAt(xOrig, yOrig);
 
             string destInput = CheckDestinationInput(chessboard, selectedPiece);
 
@@ -136,25 +136,25 @@ namespace ChessBoard
                 xOrig = origInput[0];
                 yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                         //ranges from [1,..,8]
 
-                selectedPiece = chessboard.getPieceAt(xOrig, yOrig); 
+                selectedPiece = chessboard.GetPieceAt(xOrig, yOrig); 
                 destInput = CheckDestinationInput(chessboard, selectedPiece);
             }
             
             var xDest = destInput[0];
             var yDest = Convert.ToInt32(destInput[1] - 48);                                                                                         //ranges from [1,..,8]
 
-            chessboard.movePieceAt(xOrig, yOrig, xDest, yDest);
+            chessboard.MovePieceAt(xOrig, yOrig, xDest, yDest);
 
             if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))                                             //if a pawn reaches the finish-line spawn a queen at its place
             {
-                chessboard.placePieceAt(
+                chessboard.PlacePieceAt(
                     isWhitesTurn
                         ? new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'Q')
                         : new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'q'),
                     xDest, yDest);
             }
 
-            chessboard.printBoard();
+            chessboard.PrintBoard();
 
             ApplicationMessage.printMessage(Messages.NextPlayer, blackOrWhite);
         }

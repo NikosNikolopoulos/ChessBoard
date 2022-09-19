@@ -18,7 +18,7 @@ namespace ChessBoard
             //parsing string and converting second coordinate appropriately
             int currentY = Convert.ToInt32(Position[1] - 48);
 
-            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
+            Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
 
             if (Math.Abs(currentX - targetX) == 1 && Math.Abs(currentY - targetY) == 2)
                 return true;

@@ -36,11 +36,11 @@ namespace ChessBoard
                     {
                         if (targetX > currentX)
                         {
-                            if (chessboard.getPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY) != null)
+                            if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY) != null)
                                 return true;
                         }
                         else if (targetX < currentX)
-                            if (chessboard.getPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY) != null)
+                            if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY) != null)
                                 return true;
                     }
                     break;
@@ -49,11 +49,11 @@ namespace ChessBoard
                     {
                         if (targetY > currentY)
                         {
-                            if (chessboard.getPieceAt(Position[0], currentY + radius) != null)
+                            if (chessboard.GetPieceAt(Position[0], currentY + radius) != null)
                                 return true;
                         }
                         else if (targetY < currentY)
-                            if (chessboard.getPieceAt(Position[0], currentY - radius) != null)
+                            if (chessboard.GetPieceAt(Position[0], currentY - radius) != null)
                                 return true;
                     }
                     break;
@@ -66,7 +66,7 @@ namespace ChessBoard
             char currentX = Position[0];                                                                                                                         //current position
             int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                    //parsing string and converting second coordinate appropriately
 
-            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
+            Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
 
             if ((targetX != currentX && targetY != currentY) || (targetX == currentX && targetY == currentY))
                 return false;

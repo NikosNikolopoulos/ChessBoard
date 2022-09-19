@@ -19,7 +19,7 @@ namespace ChessBoard
             int xPosInt = Utilities.Char2Int(xPos);                                                                                                                 //target position
             int yPosInt = yPos - 1;
 
-            Piece pieceAtTargetPosition = b.getPieceAt(xPos, yPos);
+            Piece pieceAtTargetPosition = b.GetPieceAt(xPos, yPos);
 
             if (Math.Abs(yPosInt - intCurrentY) != 1 && Math.Abs(intCurrentX - xPosInt) != 1)
                 return false;

@@ -1,35 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public enum BoardCoordinates
+public enum Letters
 {
-    A1, A2, A3, A4, A5, A6, A7, A8,    // 0,..., 7,
-    B1, B2, B3, B4, B5, B6, B7, B8,    // 8,...,15,
-    C1, C2, C3, C4, C5, C6, C7, C8,    //16,...,23,
-    D1, D2, D3, D4, D5, D6, D7, D8,    //24,...,31,
-    E1, E2, E3, E4, E5, E6, E7, E8,    //32,...,39,
-    F1, F2, F3, F4, F5, F6, F7, F8,    //40,...,47,
-    G1, G2, G3, G4, G5, G6, G7, G8,    //48,...,55,
-    H1, H2, H3, H4, H5, H6, H7, H8     //56,...,63
+    A = 'A',
+    B = 'B',
+    C = 'C',
+    D = 'D',
+    E = 'E',
+    F = 'F',
+    G = 'G',
+    H = 'H'
 }
 
 namespace ChessBoard
 {
     public class ChessBoard                                                                                                                                     //illustrates a chess Board
     {
-        private Dictionary<string, Piece> _board = new Dictionary<string, Piece>();
+        private readonly Dictionary<string, Piece> _board = new Dictionary<string, Piece>();
 
-        public void placePieceAt(Piece p, char xPos, int yPos)
+        public void PlacePieceAt(Piece p, char xPos, int yPos)
         {
             _board[xPos + "" + yPos] = p;
         }
 
-        public Piece getPieceAt(char xPos, int yPos)
+        public Piece GetPieceAt(char xPos, int yPos)
         {
             return _board[xPos + "" + yPos];
         }
 
-        public void movePieceAt(char xOrig, int yOrig, char xDest, int yDest)
+        public void MovePieceAt(char xOrig, int yOrig, char xDest, int yDest)
         {
             Piece movingPiece = _board[xOrig + "" + yOrig];
             movingPiece.Position = xDest + "" + yDest;
@@ -38,59 +38,68 @@ namespace ChessBoard
             _board[xDest + "" + yDest] = movingPiece;
         }
 
-        public void initialiseBoard()                                                                                                                           //responsible for initializing the chess Board with every piece in position
+        public void InitialiseBoard()                                                                                                                           //responsible for initializing the chess Board with every piece in position
         {
-            char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
-            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-            foreach (int number in numbers)
+            for (int number = 1; number <=8; number++)
             {
-                foreach (char letter in letters)
+                foreach (Letters letter in Enum.GetValues(typeof(Letters)))
                 {
                     if (number == 1 || number == 8)
-                        if (letter == 'A' || letter == 'H')
-                            _board.Add(letter + "" + number, new Rook(number == 1 ? "White":"Black", letter + "" + number, number == 1 ? 'R':'r'));
-                        else if (letter == 'B' || letter == 'G')
-                            _board.Add(letter + "" + number, new Knight(number == 1 ? "White" : "Black", letter + "" + number, number == 1 ? 'H' : 'h'));
-                        else if (letter == 'C' || letter == 'F')
-                            _board.Add(letter + "" + number, new Bishop(number == 1 ? "White" : "Black", letter + "" + number, number == 1 ? 'B' : 'b'));
-                        else if (letter == 'D')
-                            _board.Add(letter + "" + number, new Queen(number == 1 ? "White" : "Black", letter + "" + number, number == 1 ? 'Q' : 'q'));
+                        if ((char) letter == 'A' || (char) letter == 'H')
+                            _board.Add(letter + "" + number,
+                                new Rook(number == 1 ? "White" : "Black",
+                                    letter + "" + number,
+                                    number == 1 ? 'R' : 'r'));
+                        else if ((char) letter == 'B' || (char) letter == 'G')
+                            _board.Add(letter + "" + number,
+                                new Knight(number == 1 ? "White" : "Black",
+                                    letter + "" + number,
+                                    number == 1 ? 'H' : 'h'));
+                        else if ((char) letter == 'C' || (char) letter == 'F')
+                            _board.Add(letter + "" + number,
+                                new Bishop(number == 1 ? "White" : "Black",
+                                    letter + "" + number,
+                                    number == 1 ? 'B' : 'b'));
+                        else if ((char) letter == 'D')
+                            _board.Add(letter + "" + number,
+                                new Queen(number == 1 ? "White" : "Black",
+                                    letter + "" + number,
+                                    number == 1 ? 'Q' : 'q'));
                         else
-                            _board.Add(letter + "" + number, new King(number == 1 ? "White" : "Black", letter + "" + number, number == 1 ? 'K' : 'k'));
+                            _board.Add(letter + "" + number,
+                                new King(number == 1 ? "White" : "Black",
+                                    letter + "" + number,
+                                    number == 1 ? 'K' : 'k'));
                     else if (number == 2 || number == 7)
                         _board.Add(letter + "" + number,
-                            new Pawn(number == 2 ? "White" : "Black", letter + "" + number, number == 2 ? 'P' : 'p'));
+                            new Pawn(number == 2 ? "White" : "Black",
+                                letter + "" + number, number == 2 ? 'P' : 'p'));
                     else
                         _board.Add(letter + "" + number, null);
                 }
             }
         }
 
-        public void printBoard()
+        public void PrintBoard()
         {
-            char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
-            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-            Console.WriteLine("     A   B   C   D   E   F   G   H\n" +
-                              "    ___ ___ ___ ___ ___ ___ ___ ___");
-            foreach (int number in numbers)
+            ApplicationMessage.printMessage(Messages.ColumnsTop);
+            for (int number = 1; number <= 8; number++)
             {
-                foreach (char letter in letters)
+                foreach (Letters letter in Enum.GetValues(typeof(Letters)))
                 {
-                    if (letter == 'A')
-                        Console.Write(number + "  ");
+                    if ((char) letter == 'A')
+                        ApplicationMessage.printMessage(Messages.RowsLeft,null,number);
 
                     if (_board[letter + "" + number] != null)
-                        Console.Write("|_" + _board[letter + "" + number].getKind() + "_");
+                        ApplicationMessage.printMessage(Messages.PieceInCell,null,0, _board[letter + "" + number].getKind());
                     else
-                        Console.Write("|___");
+                        ApplicationMessage.printMessage(Messages.EmptyCell);
 
-                    if (letter == 'H')
-                        Console.WriteLine("|  " + number);
+                    if ((char) letter == 'H')
+                        ApplicationMessage.printMessage(Messages.RowsRight,null,number);
                 }
             }
-            Console.WriteLine("\n     A   B   C   D   E   F   G   H");
+            ApplicationMessage.printMessage(Messages.ColumnsBot);
         }
     }
 }
