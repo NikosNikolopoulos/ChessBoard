@@ -10,7 +10,7 @@ namespace ChessBoard
 
             ChessBoard chessboard = new ChessBoard();
 
-            ApplicationMessage.printMessage(Messages.Notation);
+            ApplicationMessage.PrintMessage(Messages.Notation);
             chessboard.InitialiseBoard();
             chessboard.PrintBoard();
 
@@ -29,13 +29,13 @@ namespace ChessBoard
 
             while (isOriginInputValid == false)
             {
-                ApplicationMessage.printMessage(Messages.SelectPiece, blackOrWhite);
+                ApplicationMessage.PrintMessage(Messages.SelectPiece, blackOrWhite);
 
                 originInput = Console.ReadLine();
                 
                 if (originInput.Length != 2)                                                                                                        //perform a basic input validity scan
                 {
-                    ApplicationMessage.printMessage(Messages.InvalidLength, blackOrWhite);
+                    ApplicationMessage.PrintMessage(Messages.InvalidLength, blackOrWhite);
                 }
                 else
                 {
@@ -45,20 +45,20 @@ namespace ChessBoard
 
                     if (Utilities.Char2Int(xOrig) < 1 || Utilities.Char2Int(xOrig) > 8 || yOrig < 1 || yOrig > 8)
                     {
-                        ApplicationMessage.printMessage(Messages.InvalidInput, blackOrWhite);
+                        ApplicationMessage.PrintMessage(Messages.InvalidInput, blackOrWhite);
                     }
                     else
                     {
                         if (chessboard.GetPieceAt(xOrig, yOrig) == null)
                         {
-                            ApplicationMessage.printMessage(Messages.EmptySelection, blackOrWhite);
+                            ApplicationMessage.PrintMessage(Messages.EmptySelection, blackOrWhite);
                         }
 
                         else
                         {
                             if (chessboard.GetPieceAt(xOrig, yOrig).Color != blackOrWhite)
                             {
-                                ApplicationMessage.printMessage(Messages.WrongColor, blackOrWhite);
+                                ApplicationMessage.PrintMessage(Messages.WrongColor, blackOrWhite);
                             }
                             else
                             {
@@ -78,18 +78,18 @@ namespace ChessBoard
 
             while (isDestinationInputValid == false)
             {
-                ApplicationMessage.printMessage(Messages.SelectDestination);
+                ApplicationMessage.PrintMessage(Messages.SelectDestination);
 
                 destinationInput = Console.ReadLine();
 
                 if (destinationInput == "")                                                                                                         //perform a basic input validity scan
                 {
-                    ApplicationMessage.printMessage(Messages.UndoSelection);
+                    ApplicationMessage.PrintMessage(Messages.UndoSelection);
                     break;
                 }
                 if (destinationInput.Length != 2)
                 {
-                    ApplicationMessage.printMessage(Messages.InvalidLength);
+                    ApplicationMessage.PrintMessage(Messages.InvalidLength);
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace ChessBoard
                     int yDest = Convert.ToInt32(destinationInput[1] - 48);                                                                          //ranges from [1,..,8]
                     if (Utilities.Char2Int(xDest) < 1 || Utilities.Char2Int(xDest) > 8 || yDest < 1 || yDest > 8)
                     {
-                        ApplicationMessage.printMessage(Messages.InvalidInput);
+                        ApplicationMessage.PrintMessage(Messages.InvalidInput);
                     }
                     else
                     {
@@ -117,7 +117,7 @@ namespace ChessBoard
         {
             string blackOrWhite = isWhitesTurn ? "White" : "Black";
 
-            ApplicationMessage.printMessage(Messages.NextPlayerColor,blackOrWhite);
+            ApplicationMessage.PrintMessage(Messages.NextPlayerColor,blackOrWhite);
 
             string origInput = CheckOriginInput(chessboard, blackOrWhite);                                                                          //variables for storing the inputs 
 
@@ -156,7 +156,7 @@ namespace ChessBoard
 
             chessboard.PrintBoard();
 
-            ApplicationMessage.printMessage(Messages.NextPlayer, blackOrWhite);
+            ApplicationMessage.PrintMessage(Messages.NextPlayer, blackOrWhite);
         }
     }
 }

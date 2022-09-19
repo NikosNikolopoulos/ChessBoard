@@ -24,7 +24,7 @@ namespace ChessBoard
 
     public static class ApplicationMessage
     {
-        public static void printMessage(Messages messageNumber, string blackOrWhite = "White", int number = 1, char kind = 'P')
+        public static void PrintMessage(Messages messageNumber, string blackOrWhite = "White", int number = 1, char kind = 'P')
         {
             string msg = "";
 

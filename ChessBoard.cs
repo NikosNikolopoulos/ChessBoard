@@ -82,24 +82,24 @@ namespace ChessBoard
 
         public void PrintBoard()
         {
-            ApplicationMessage.printMessage(Messages.ColumnsTop);
+            ApplicationMessage.PrintMessage(Messages.ColumnsTop);
             for (int number = 1; number <= 8; number++)
             {
                 foreach (Letters letter in Enum.GetValues(typeof(Letters)))
                 {
                     if ((char) letter == 'A')
-                        ApplicationMessage.printMessage(Messages.RowsLeft,null,number);
+                        ApplicationMessage.PrintMessage(Messages.RowsLeft,null,number);
 
                     if (_board[letter + "" + number] != null)
-                        ApplicationMessage.printMessage(Messages.PieceInCell,null,0, _board[letter + "" + number].getKind());
+                        ApplicationMessage.PrintMessage(Messages.PieceInCell,null,0, _board[letter + "" + number].getKind());
                     else
-                        ApplicationMessage.printMessage(Messages.EmptyCell);
+                        ApplicationMessage.PrintMessage(Messages.EmptyCell);
 
                     if ((char) letter == 'H')
-                        ApplicationMessage.printMessage(Messages.RowsRight,null,number);
+                        ApplicationMessage.PrintMessage(Messages.RowsRight,null,number);
                 }
             }
-            ApplicationMessage.printMessage(Messages.ColumnsBot);
+            ApplicationMessage.PrintMessage(Messages.ColumnsBot);
         }
     }
 }
