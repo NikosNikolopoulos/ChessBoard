@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Markup;
 
 enum RookDisplacementType
 {
@@ -20,19 +19,15 @@ namespace ChessBoard
 
         public bool IsPieceInBetween(char targetX, int targetY, int displacementType, ChessBoard chessboard)
         {
-            char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
-            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
             char currentX = Position[0];                                                                                                                        //current position
             int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                   //parsing string and converting second coordinate appropriately
 
-            int horizontalJump = Math.Abs(currentX - targetX);
-            int verticalJump = Math.Abs(currentY - targetY);
+            int jump = targetY==currentY ? Math.Abs(currentX - targetX) : Math.Abs(currentY - targetY);
 
             switch (displacementType)
             {
                 case (int) RookDisplacementType.Horizontal:
-                    for (int radius = 1; radius < horizontalJump; radius++)
+                    for (int radius = 1; radius < jump; radius++)
                     {
                         if (targetX > currentX)
                         {
@@ -44,8 +39,8 @@ namespace ChessBoard
                                 return true;
                     }
                     break;
-                case (int)RookDisplacementType.Vertical:
-                    for (int radius = 1; radius < verticalJump; radius++)
+                case (int) RookDisplacementType.Vertical:
+                    for (int radius = 1; radius < jump; radius++)
                     {
                         if (targetY > currentY)
                         {
