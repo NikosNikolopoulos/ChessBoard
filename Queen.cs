@@ -38,6 +38,22 @@ namespace ChessBoard
                         if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY - radius) != null)
                             return true;
                         break;
+                    case (int)DisplacementType.North:
+                        if (chessboard.GetPieceAt(currentX, currentY + radius) != null)
+                            return true;
+                        break;
+                    case (int)DisplacementType.East:
+                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY) != null)
+                            return true;
+                        break;
+                    case (int)DisplacementType.South:
+                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY) != null)
+                            return true;
+                        break;
+                    case (int)DisplacementType.West:
+                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY) != null)
+                            return true;
+                        break;
                 }
             }
             return false;
@@ -49,25 +65,39 @@ namespace ChessBoard
             int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                    //parsing string and converting second coordinate appropriately
 
             Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
-
-            if (Math.Abs(currentX - targetX) != Math.Abs(currentY - targetY) || Math.Abs(currentX - targetX) == 0)
+            if ((targetX == currentX && targetY == currentY))
                 return false;
-            if (targetX > currentX)
+            if (targetY > currentY)
+            {
+                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.North, chessboard))
+                    return false;
                 if (IsPieceInBetween(targetX, targetY,
-                        targetY > currentY
+                        targetX > currentX
                             ? (int)DisplacementType.NorthEast
                             : (int)DisplacementType.NorthWest, chessboard))
                     return false;
-            if (targetX < currentX)
+            }
+            if (targetY == currentY)
+            {
+                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.East, chessboard))
+                    return false;
+                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.West, chessboard))
+                    return false;
+            }
+            if (targetY < currentY)
+            {
+                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.South, chessboard))
+                    return false;
                 if (IsPieceInBetween(targetX, targetY,
-                        targetY > currentY
+                        targetX > currentX
                             ? (int)DisplacementType.SouthEast
                             : (int)DisplacementType.SouthWest, chessboard))
                     return false;
-            if (pieceAtTargetPosition == null)
-                return true;
+            }
             if (pieceAtTargetPosition.Color == Color)
                 return false;
+            if (Math.Abs(currentX - targetX) == Math.Abs(currentY - targetY) || (targetX == currentX) || (targetY == currentY))
+                return true;
             return true;
         }
     }

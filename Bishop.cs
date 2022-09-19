@@ -52,15 +52,15 @@ namespace ChessBoard
 
             if (Math.Abs(currentX - targetX) != Math.Abs(currentY - targetY) || Math.Abs(currentX - targetX) == 0)
                 return false;
-            if (targetX > currentX)
+            if (targetY > currentY)
                 if (IsPieceInBetween(targetX, targetY,
-                        targetY > currentY
+                        targetX > currentX
                             ? (int)DisplacementType.NorthEast
                             : (int)DisplacementType.NorthWest, chessboard))
                     return false;
-            if (targetX < currentX)
+            if (targetY < currentY)
                 if (IsPieceInBetween(targetX, targetY,
-                        targetY > currentY
+                        targetX > currentX
                             ? (int)DisplacementType.SouthEast
                             : (int)DisplacementType.SouthWest, chessboard))
                     return false;
