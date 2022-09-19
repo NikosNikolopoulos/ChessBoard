@@ -7,7 +7,7 @@ namespace ChessBoard
     {
         public static void PlayChess()
         {
-            var turn = true;                                                                                                                     //this field flags if its the black or white players turn
+            var turn = true;                                                                                                                      //this field flags if its the black or white players turn
 
             ChessBoard chessboard = new ChessBoard();
 
@@ -25,7 +25,7 @@ namespace ChessBoard
 
         public static bool CheckOriginInput(string originInput, ChessBoard chessboard, string blackOrWhite)
         {
-            if (originInput.Length != 2)                                                                                                        //perform a basic input validity scan
+            if (originInput.Length != 2)                                                                                                          //perform a basic input validity scan
             {
                 ApplicationMessage.PrintMessage(Messages.InvalidLength, blackOrWhite);
             }
@@ -33,7 +33,7 @@ namespace ChessBoard
             {
                 char xOrig = originInput[0];
 
-                int yOrig = Convert.ToInt32(originInput[1] - 48);                                                                               //ranges from [1,..,8]
+                int yOrig = Convert.ToInt32(originInput[1] - 48);                                                                                 //ranges from [1,..,8]
 
                 if (Utilities.Char2Int(xOrig) < 1 || Utilities.Char2Int(xOrig) > 8 || yOrig < 1 || yOrig > 8)
                 {
@@ -89,7 +89,7 @@ namespace ChessBoard
             {
                 char xDest = destinationInput[0];
                 
-                int yDest = Convert.ToInt32(destinationInput[1] - 48);                                                                              //ranges from [1,..,8]
+                int yDest = Convert.ToInt32(destinationInput[1] - 48);                                                                            //ranges from [1,..,8]
                 if (Utilities.Char2Int(xDest) < 1 || Utilities.Char2Int(xDest) > 8 || yDest < 1 || yDest > 8)
                 {
                     ApplicationMessage.PrintMessage(Messages.InvalidInput);
@@ -117,7 +117,7 @@ namespace ChessBoard
 
                 destinationInput = Console.ReadLine();
 
-                if (destinationInput == "")                                                                                                         //perform a basic input validity scan
+                if (destinationInput == "")                                                                                                       //perform a basic input validity scan
                 {
                     ApplicationMessage.PrintMessage(Messages.UndoSelection);
                     return null;
@@ -135,33 +135,33 @@ namespace ChessBoard
 
             ApplicationMessage.PrintMessage(Messages.NextPlayerColor,blackOrWhite);
 
-            string origInput = AcceptLegalOriginInput(chessboard, blackOrWhite);                                                                    //variables for storing the inputs 
+            string origInput = AcceptLegalOriginInput(chessboard, blackOrWhite);                                                                  //variables for storing the inputs 
 
-            var xOrig = origInput[0];                                                                                                          //variables for storing a char & an int after parsing the string
+            var xOrig = origInput[0];                                                                                                        //variables for storing a char & an int after parsing the string
 
-            var yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                         //ranges from [1,..,8]
+            var yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                       //ranges from [1,..,8]
 
             var selectedPiece = chessboard.GetPieceAt(xOrig, yOrig);
 
             string destInput = AcceptLegalDestinationInput(chessboard, selectedPiece);
 
-            while (destInput == null)                                                                                                               //UNDO input detected
+            while (destInput == null)                                                                                                             //UNDO input detected
             {
-                origInput = AcceptLegalOriginInput(chessboard, blackOrWhite);                                                                       //variables for storing the inputs
+                origInput = AcceptLegalOriginInput(chessboard, blackOrWhite);                                                                     //variables for storing the inputs
 
                 xOrig = origInput[0];
-                yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                         //ranges from [1,..,8]
+                yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                       //ranges from [1,..,8]
 
                 selectedPiece = chessboard.GetPieceAt(xOrig, yOrig); 
                 destInput = AcceptLegalDestinationInput(chessboard, selectedPiece);
             }
             
             var xDest = destInput[0];
-            var yDest = Convert.ToInt32(destInput[1] - 48);                                                                                         //ranges from [1,..,8]
+            var yDest = Convert.ToInt32(destInput[1] - 48);                                                                                       //ranges from [1,..,8]
 
             chessboard.MovePieceAt(xOrig, yOrig, xDest, yDest);
 
-            if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))                                             //if a pawn reaches the finish-line spawn a queen at its place !!!!!!
+            if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))                                           //if a pawn reaches the finish-line spawn a queen at its place !!!!!!
             {
                 chessboard.PlacePieceAt(
                     isWhitesTurn

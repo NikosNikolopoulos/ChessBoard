@@ -20,13 +20,13 @@ namespace ChessBoard
 
             Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
 
+            if (pieceAtTargetPosition != null)
+                if (pieceAtTargetPosition.Color == Color)
+                    return false;
             if (Math.Abs(currentX - targetX) == 1 && Math.Abs(currentY - targetY) == 2)
                 return true;
             if (Math.Abs(currentX - targetX) == 2 && Math.Abs(currentY - targetY) == 1)
                 return true;
-            if (pieceAtTargetPosition != null)
-                if (pieceAtTargetPosition.Color == Color)
-                    return false;
             return false;
         }
     }

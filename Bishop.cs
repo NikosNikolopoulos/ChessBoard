@@ -1,13 +1,5 @@
 ﻿using System;
 
-enum BishopDisplacementType
-{
-   plusplus, 
-   plusminus,
-   minusplus,
-   minusminus
-}
-
 namespace ChessBoard
 {
     public class Bishop : Piece
@@ -30,19 +22,19 @@ namespace ChessBoard
             {
                 switch (displacementType)
                 {
-                    case (int)BishopDisplacementType.plusplus:
+                    case (int)DisplacementType.NorthEast:
                         if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY + radius) != null)
                             return true;
                         break;
-                    case (int)BishopDisplacementType.plusminus:
+                    case (int)DisplacementType.NorthWest:
                         if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY - radius) != null)
                             return true;
                         break;
-                    case (int)BishopDisplacementType.minusplus:
+                    case (int)DisplacementType.SouthEast:
                         if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY + radius) != null)
                             return true;
                         break;
-                    case (int)BishopDisplacementType.minusminus:
+                    case (int)DisplacementType.SouthWest:
                         if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY - radius) != null)
                             return true;
                         break;
@@ -63,14 +55,14 @@ namespace ChessBoard
             if (targetX > currentX)
                 if (IsPieceInBetween(targetX, targetY,
                         targetY > currentY
-                            ? (int)BishopDisplacementType.plusplus
-                            : (int)BishopDisplacementType.plusminus, chessboard))
+                            ? (int)DisplacementType.NorthEast
+                            : (int)DisplacementType.NorthWest, chessboard))
                     return false;
             if (targetX < currentX)
                 if (IsPieceInBetween(targetX, targetY,
                         targetY > currentY
-                            ? (int)BishopDisplacementType.minusplus
-                            : (int)BishopDisplacementType.minusminus, chessboard))
+                            ? (int)DisplacementType.SouthEast
+                            : (int)DisplacementType.SouthWest, chessboard))
                     return false;
             if (pieceAtTargetPosition == null)
                 return true;
