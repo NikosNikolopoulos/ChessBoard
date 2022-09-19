@@ -19,12 +19,12 @@ namespace ChessBoard
             Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
 
             if (Color == "Black" && currentY == 7 && Math.Abs(targetY - currentY) == 2)                                                                                 //allow for starting position "jump" for white pawns but not over other pawns!!
-                if (pieceAtTargetPosition == null && chessboard.GetPieceAt(targetX, targetY + 1) == null)
+                if (pieceAtTargetPosition == null && chessboard.GetPieceAt(targetX, targetY + 1) == null && targetX == currentX)
                     return true;
                 else
                     return false;
             if (Color == "White" && currentY == 2 && Math.Abs(targetY - currentY) == 2)                                                                                 //allow for starting position "jump" for black pawns but not over other pawns!!
-                if (pieceAtTargetPosition == null && chessboard.GetPieceAt(targetX, targetY - 1) == null)
+                if (pieceAtTargetPosition == null && chessboard.GetPieceAt(targetX, targetY - 1) == null && targetX == currentX)
                     return true;
                 else
                     return false;

@@ -19,7 +19,8 @@ namespace ChessBoard
         SelectDestination,
         UndoSelection,
         NextPlayerColor,
-        NextPlayer
+        NextPlayer,
+        IllegalMove
     }
 
     public static class ApplicationMessage
@@ -84,11 +85,16 @@ namespace ChessBoard
                           "\n__________________________________________";
                     break;
                 case Messages.NextPlayerColor:
-                    msg = $"\n\n{blackOrWhite}'s turn!" +
+                    msg = $"\n{blackOrWhite}'s turn!" +
                           "\n__________________________________________";
                     break;
                 case Messages.NextPlayer:
-                    msg = "\nNext player's turn!";
+                    msg = "\nNext player's turn!" +
+                          "\n__________________________________________";
+                    break;
+                case Messages.IllegalMove:
+                    msg = "Illegal operation! Please try again." +
+                          "\n__________________________________________";
                     break;
                 case Messages.ColumnsTop:
                     msg = "     A   B   C   D   E   F   G   H" +
