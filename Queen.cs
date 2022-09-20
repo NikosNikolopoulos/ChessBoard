@@ -59,45 +59,46 @@ namespace ChessBoard
             return false;
         }
 
-        public override bool IsLegalMove(char targetX, int targetY, ChessBoard chessboard)
+        public override bool IsLegalMove(char targetX, int targetY, ChessBoard chessboard) //  TODO DEBUG!!!!
         {
             char currentX = Position[0];                                                                                                                         //current position
             int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                    //parsing string and converting second coordinate appropriately
 
+            Rook dummyRook = new Rook(Color, Position, Color == "White" ? 'R' : 'r');
+            Bishop dummyBishop = new Bishop(Color, Position, Color == "White" ? 'B' : 'b');
+
             Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
-            if ((targetX == currentX && targetY == currentY))
+            if (!dummyRook.IsLegalMove(targetX, targetY, chessboard) && !dummyBishop.IsLegalMove(targetX, targetY, chessboard))
                 return false;
-            if (targetY > currentY)
-            {
-                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.North, chessboard))
-                    return false;
-                if (IsPieceInBetween(targetX, targetY,
-                        targetX > currentX
-                            ? (int)DisplacementType.NorthEast
-                            : (int)DisplacementType.NorthWest, chessboard))
-                    return false;
-            }
-            if (targetY == currentY)
-            {
-                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.East, chessboard))
-                    return false;
-                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.West, chessboard))
-                    return false;
-            }
-            if (targetY < currentY)
-            {
-                if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.South, chessboard))
-                    return false;
-                if (IsPieceInBetween(targetX, targetY,
-                        targetX > currentX
-                            ? (int)DisplacementType.SouthEast
-                            : (int)DisplacementType.SouthWest, chessboard))
-                    return false;
-            }
-            if (pieceAtTargetPosition.Color == Color)
-                return false;
-            if (Math.Abs(currentX - targetX) == Math.Abs(currentY - targetY) || (targetX == currentX) || (targetY == currentY))
-                return true;
+            //if (targetY > currentY)
+            //{
+            //    if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.North, chessboard))
+            //        return false;
+            //    if (IsPieceInBetween(targetX, targetY,
+            //            targetX > currentX
+            //                ? (int)DisplacementType.NorthEast
+            //                : (int)DisplacementType.NorthWest, chessboard))
+            //        return false;
+            //}
+            //if (targetY == currentY)
+            //{
+            //    if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.East, chessboard))
+            //        return false;
+            //    if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.West, chessboard))
+            //        return false;
+            //}
+            //if (targetY < currentY)
+            //{
+            //    if (IsPieceInBetween(targetX, targetY, (int)DisplacementType.South, chessboard))
+            //        return false;
+            //    if (IsPieceInBetween(targetX, targetY,
+            //            targetX > currentX
+            //                ? (int)DisplacementType.SouthEast
+            //                : (int)DisplacementType.SouthWest, chessboard))
+            //        return false;
+            //}
+            //if (pieceAtTargetPosition.Color == Color)
+            //    return false;
             return true;
         }
     }

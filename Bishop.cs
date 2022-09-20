@@ -22,20 +22,20 @@ namespace ChessBoard
             {
                 switch (displacementType)
                 {
-                    case (int)DisplacementType.NorthEast:
+                    case (int)DisplacementType.SouthEast:
                         if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY + radius) != null)
                             return true;
                         break;
                     case (int)DisplacementType.NorthWest:
-                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY - radius) != null)
-                            return true;
-                        break;
-                    case (int)DisplacementType.SouthEast:
-                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY + radius) != null)
+                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY - radius) != null)
                             return true;
                         break;
                     case (int)DisplacementType.SouthWest:
-                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY - radius) != null)
+                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) - radius), currentY + radius) != null)
+                            return true;
+                        break;
+                    case (int)DisplacementType.NorthEast:
+                        if (chessboard.GetPieceAt(Utilities.Int2Char(Utilities.Char2Int(currentX) + radius), currentY - radius) != null)
                             return true;
                         break;
                 }
@@ -55,14 +55,14 @@ namespace ChessBoard
             if (targetY > currentY)
                 if (IsPieceInBetween(targetX, targetY,
                         targetX > currentX
-                            ? (int)DisplacementType.NorthEast
-                            : (int)DisplacementType.NorthWest, chessboard))
+                            ? (int)DisplacementType.SouthEast
+                            : (int)DisplacementType.SouthWest, chessboard))
                     return false;
             if (targetY < currentY)
                 if (IsPieceInBetween(targetX, targetY,
                         targetX > currentX
-                            ? (int)DisplacementType.SouthEast
-                            : (int)DisplacementType.SouthWest, chessboard))
+                            ? (int)DisplacementType.NorthEast
+                            : (int)DisplacementType.NorthWest, chessboard))
                     return false;
             if (pieceAtTargetPosition == null)
                 return true;

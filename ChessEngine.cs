@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection.Metadata.Ecma335;
 
 namespace ChessBoard
 {
@@ -7,7 +6,7 @@ namespace ChessBoard
     {
         public static void PlayChess()
         {
-            var turn = true;                                                                                                                      //this field flags if its the black or white players turn
+            var turn = true; 
 
             ChessBoard chessboard = new ChessBoard();
 
@@ -15,12 +14,13 @@ namespace ChessBoard
             chessboard.InitialiseBoard();
             chessboard.PrintBoard();
 
-            while (true)
+            while (!chessboard.isGameOver())
             {
-                ChessEngine.NextMove(chessboard, turn);
+                NextMove(chessboard, turn);
                 turn = !turn;
             }
 
+            ApplicationMessage.PrintMessage(Messages.WinnerMessage,turn ? "Black" : "White");
         }
 
         public static bool CheckOriginInput(string originInput, ChessBoard chessboard, string blackOrWhite)

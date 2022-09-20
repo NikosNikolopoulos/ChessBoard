@@ -20,7 +20,8 @@ namespace ChessBoard
         UndoSelection,
         NextPlayerColor,
         NextPlayer,
-        IllegalMove
+        IllegalMove,
+        WinnerMessage
     }
 
     public static class ApplicationMessage
@@ -114,6 +115,10 @@ namespace ChessBoard
                     break;
                 case Messages.EmptyCell:
                     msg = "|___";
+                    break;
+                case Messages.WinnerMessage:
+                    msg = $"Congratulations!!! {blackOrWhite}'s win!" +
+                          "\n__________________________________________";
                     break;
             }
 
