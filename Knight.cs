@@ -16,9 +16,9 @@ namespace ChessBoard
             //current position
             char currentX = Position[0];
             //parsing string and converting second coordinate appropriately
-            int currentY = Convert.ToInt32(Position[1] - 48);
+            int currentY = Convert.ToInt32(Position[1]) - 48;
 
-            Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
+            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
 
             if (pieceAtTargetPosition != null)
                 if (pieceAtTargetPosition.Color == Color)

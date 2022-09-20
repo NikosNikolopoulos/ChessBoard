@@ -14,12 +14,12 @@ namespace ChessBoard
         public override bool IsLegalMove(char xPos, int yPos, ChessBoard b)
         {
             int intCurrentX = Utilities.Char2Int(Position[0]);                                                                                                      //current position
-            int intCurrentY = Convert.ToInt32(Position[1] - 49);                                                                                                    //parsing string and converting second coordinate appropriately
+            int intCurrentY = Convert.ToInt32(Position[1]) - 48;                                                                                                    //parsing string and converting second coordinate appropriately
 
             int xPosInt = Utilities.Char2Int(xPos);                                                                                                                 //target position
-            int yPosInt = yPos - 1;
+            int yPosInt = yPos;
 
-            Piece pieceAtTargetPosition = b.GetPieceAt(xPos, yPos);
+            Piece pieceAtTargetPosition = b.getPieceAt(xPos, yPos);
 
             if (Math.Abs(yPosInt - intCurrentY) != 1 && Math.Abs(intCurrentX - xPosInt) != 1)
                 return false;

@@ -14,17 +14,17 @@ namespace ChessBoard
         public override bool IsLegalMove(char targetX, int targetY, ChessBoard chessboard)
         {
             char currentX = Position[0];                                                                                                                                //current position
-            int currentY = Convert.ToInt32(Position[1] - 48);                                                                                                           //parsing string and converting second coordinate appropriately
+            int currentY = Convert.ToInt32(Position[1]) - 48;                                                                                                           //parsing string and converting second coordinate appropriately
 
-            Piece pieceAtTargetPosition = chessboard.GetPieceAt(targetX, targetY);
+            Piece pieceAtTargetPosition = chessboard.getPieceAt(targetX, targetY);
 
             if (Color == "Black" && currentY == 7 && Math.Abs(targetY - currentY) == 2)                                                                                 //allow for starting position "jump" for white pawns but not over other pawns!!
-                if (pieceAtTargetPosition == null && chessboard.GetPieceAt(targetX, targetY + 1) == null && targetX == currentX)
+                if (pieceAtTargetPosition == null && chessboard.getPieceAt(targetX, targetY + 1) == null && targetX == currentX)
                     return true;
                 else
                     return false;
             if (Color == "White" && currentY == 2 && Math.Abs(targetY - currentY) == 2)                                                                                 //allow for starting position "jump" for black pawns but not over other pawns!!
-                if (pieceAtTargetPosition == null && chessboard.GetPieceAt(targetX, targetY - 1) == null && targetX == currentX)
+                if (pieceAtTargetPosition == null && chessboard.getPieceAt(targetX, targetY - 1) == null && targetX == currentX)
                     return true;
                 else
                     return false;

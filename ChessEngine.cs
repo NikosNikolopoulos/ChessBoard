@@ -11,8 +11,8 @@ namespace ChessBoard
             ChessBoard chessboard = new ChessBoard();
 
             ApplicationMessage.PrintMessage(Messages.Notation);
-            chessboard.InitialiseBoard();
-            chessboard.PrintBoard();
+            chessboard.initialiseBoard();
+            chessboard.printBoard();
 
             while (!chessboard.isGameOver())
             {
@@ -33,7 +33,7 @@ namespace ChessBoard
             {
                 char xOrig = originInput[0];
 
-                int yOrig = Convert.ToInt32(originInput[1] - 48);                                                                                 //ranges from [1,..,8]
+                int yOrig = Convert.ToInt32(originInput[1]) - 48;                                                                                 //ranges from [1,..,8]
 
                 if (Utilities.Char2Int(xOrig) < 1 || Utilities.Char2Int(xOrig) > 8 || yOrig < 1 || yOrig > 8)
                 {
@@ -41,14 +41,14 @@ namespace ChessBoard
                 }
                 else
                 {
-                    if (chessboard.GetPieceAt(xOrig, yOrig) == null)
+                    if (chessboard.getPieceAt(xOrig, yOrig) == null)
                     {
                         ApplicationMessage.PrintMessage(Messages.EmptySelection, blackOrWhite);
                     }
 
                     else
                     {
-                        if (chessboard.GetPieceAt(xOrig, yOrig).Color != blackOrWhite)
+                        if (chessboard.getPieceAt(xOrig, yOrig).Color != blackOrWhite)
                         {
                             ApplicationMessage.PrintMessage(Messages.WrongColor, blackOrWhite);
                         }
@@ -89,7 +89,7 @@ namespace ChessBoard
             {
                 char xDest = destinationInput[0];
                 
-                int yDest = Convert.ToInt32(destinationInput[1] - 48);                                                                            //ranges from [1,..,8]
+                int yDest = Convert.ToInt32(destinationInput[1]) - 48;                                                                            //ranges from [1,..,8]
                 if (Utilities.Char2Int(xDest) < 1 || Utilities.Char2Int(xDest) > 8 || yDest < 1 || yDest > 8)
                 {
                     ApplicationMessage.PrintMessage(Messages.InvalidInput);
@@ -139,9 +139,9 @@ namespace ChessBoard
 
             var xOrig = origInput[0];                                                                                                        //variables for storing a char & an int after parsing the string
 
-            var yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                       //ranges from [1,..,8]
+            var yOrig = Convert.ToInt32(origInput[1]) - 48;                                                                                   //ranges from [1,..,8]
 
-            var selectedPiece = chessboard.GetPieceAt(xOrig, yOrig);
+            var selectedPiece = chessboard.getPieceAt(xOrig, yOrig);
 
             string destInput = AcceptLegalDestinationInput(chessboard, selectedPiece);
 
@@ -150,27 +150,27 @@ namespace ChessBoard
                 origInput = AcceptLegalOriginInput(chessboard, blackOrWhite);                                                                     //variables for storing the inputs
 
                 xOrig = origInput[0];
-                yOrig = Convert.ToInt32(origInput[1] - 48);                                                                                       //ranges from [1,..,8]
+                yOrig = Convert.ToInt32(origInput[1]) - 48;                                                                                       //ranges from [1,..,8]
 
-                selectedPiece = chessboard.GetPieceAt(xOrig, yOrig); 
+                selectedPiece = chessboard.getPieceAt(xOrig, yOrig); 
                 destInput = AcceptLegalDestinationInput(chessboard, selectedPiece);
             }
             
             var xDest = destInput[0];
-            var yDest = Convert.ToInt32(destInput[1] - 48);                                                                                       //ranges from [1,..,8]
+            var yDest = Convert.ToInt32(destInput[1]) - 48;                                                                                   //ranges from [1,..,8]
 
-            chessboard.MovePieceAt(xOrig, yOrig, xDest, yDest);
+            chessboard.movePieceAt(xOrig, yOrig, xDest, yDest);
 
             if ((yDest == 1 || yDest == 8) && (selectedPiece.Kind == 'P' || selectedPiece.Kind == 'p'))                                           //if a pawn reaches the finish-line spawn a queen at its place !!!!!!
             {
-                chessboard.PlacePieceAt(
+                chessboard.placePieceAt(
                     isWhitesTurn
                         ? new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'Q')
                         : new Queen(selectedPiece.getColor(), selectedPiece.getPosition(), 'q'),
                     xDest, yDest);
             }
 
-            chessboard.PrintBoard();
+            chessboard.printBoard();
 
             ApplicationMessage.PrintMessage(Messages.NextPlayer, blackOrWhite);
         }
