@@ -26,11 +26,11 @@ namespace ChessBoard
 
     public static class ApplicationMessage
     {
-        public static void PrintMessage(Messages messageNumber, string blackOrWhite = "White", int number = 1, char kind = 'P')
+        public static void PrintMessage(Messages msgNumber, string blackOrWhite = "White", int number = 1, char kind = 'P')
         {
             string msg = "";
 
-            switch (messageNumber)
+            switch (msgNumber)
             {
                 case Messages.Notation:
                     msg = "<=========================================>" +
@@ -122,8 +122,8 @@ namespace ChessBoard
                     break;
             }
 
-            if (messageNumber == Messages.RowsLeft || messageNumber == Messages.EmptyCell ||
-                messageNumber == Messages.PieceInCell)
+            if (msgNumber == Messages.RowsLeft || msgNumber == Messages.EmptyCell ||
+                msgNumber == Messages.PieceInCell)
                 Console.Write(msg);
             else
                 Console.WriteLine(msg);
