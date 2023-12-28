@@ -111,6 +111,7 @@ namespace Chess
 
         public Coordinate(string letter, int number)
         {
+            log = new List<string>();
             Letter = letter;
             Number = number;
             if (!this.IsValid())
@@ -119,6 +120,7 @@ namespace Chess
 
         public Coordinate(int letter, int number)
         {
+            log = new List<string>();
             Letter = Mappings.ToLet(letter);
             Number = number;
             if (!this.IsValid())
@@ -212,119 +214,15 @@ namespace Chess
 
     public class Scopes
     {
-        public interface ChessBoard
-        {
-            List<string> Logs { get; set; }
-            Dictionary<Coordinate, Piece> PieceByCoordinate { get; set; }
-            [DefaultValue(true)] bool IsWhitesTurn { get; set; }
-
-            void NextMove(string originInput, string destinationInput)
-            {
-                var origin = new Coordinate(originInput[0].ToString(), Mappings.ToNum(originInput[1].ToString()));
-                if (!PieceByCoordinate.TryGetValue(origin, out var piece))
-                    Logs.Add(Utils.GetMessage(Errors.EmptySelection));
-                else if ((IsWhitesTurn && piece.Color == Colors.Black) ||
-                         (!IsWhitesTurn && piece.Color == Colors.White))
-                    Logs.Add(Utils.GetMessage(Errors.WrongColor, IsWhitesTurn ? Colors.White : Colors.Black));
-
-                var destination = new Coordinate(destinationInput[0].ToString(), Mappings.ToNum(destinationInput[1].ToString()));
-
-                if (piece != null && !piece.IsLegalMovePiece(origin, destination)) Logs.Add(Utils.GetMessage(Errors.IllegalMove));
-                if (piece != null && !Checks.IsLegalMove(PieceByCoordinate, piece, origin, destination)) Logs.Add(Utils.GetMessage(Errors.IllegalMove));
-
-                var errors = Logs;
-                Logs = errors.ToHashSet().ToList();
-                if (errors.Any()) return;
-
-                PieceByCoordinate.Remove(origin);
-                PieceByCoordinate.Remove(destination);
-                PieceByCoordinate.Add(destination, piece);
-                PieceByCoordinate = PieceByCoordinate.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-                IsWhitesTurn = !IsWhitesTurn;
-            }
-
-            void InitializeBoard()
-            {
-                PieceByCoordinate = new Dictionary<Coordinate, Piece>();
-                IsWhitesTurn = true;
-                Enumerable.Range(1, 8).ToList().ForEach(column =>
-                {
-                    new[] { 1, 2, 7, 8 }.ToList().ForEach(row =>
-                    {
-                        var color = row < 5 ? Colors.White : Colors.Black;
-                        var piece = (row, column) switch
-                        {
-                            (2 or 7, _) => new Piece(color, Pieces.Pawn),
-                            (_, 1 or 8) => new Piece(color, Pieces.Rook),
-                            (_, 2 or 7) => new Piece(color, Pieces.Knight),
-                            (_, 3 or 6) => new Piece(color, Pieces.Bishop),
-                            (_, 4) => new Piece(color, Pieces.Queen),
-                            (_, 5) => new Piece(color, Pieces.King),
-                            (_, _) => null
-                        };
-                        PieceByCoordinate[new Coordinate(column, row)] = piece;
-                    });
-                });
-            }
-        }
-
-        public interface IO
-        {
-            ChessBoard Board { get; set; }
-
-            void Resume(List<ImportExport> items)
-            {
-                Board.PieceByCoordinate.Clear();
-                items.ForEach(item => Board.PieceByCoordinate.Add(new Coordinate(item.Letter, item.Number), new Piece(item.Color, item.Kind)));
-            }
-
-            List<ImportExport> PiecesList() => Board.PieceByCoordinate.Select(x =>
-                                                new ImportExport
-                                                {
-                                                    Letter = x.Key.Letter,
-                                                    Number = x.Key.Number,
-                                                    Kind = x.Value.Kind,
-                                                    Color = x.Value.Color
-                                                }).ToList();
-
-            List<ImportExport> PiecesListWithEmptyCells()
-            {
-                var items = PiecesList();
-                Enumerable.Range(1, 8).ToList().ForEach(i =>
-                {
-                    Enumerable.Range(1, 8).ToList().ForEach(j =>
-                    {
-                        var coordinate = new Coordinate(i, j);
-                        if (!items.Any(x => x.Letter == coordinate.Letter && x.Number == coordinate.Number))
-                            items.Add(new ImportExport
-                            {
-                                Letter = coordinate.Letter,
-                                Number = coordinate.Number,
-                                Kind = Pieces.NoPiece,
-                                Color = Colors.NoColor
-                            });
-                    });
-                });
-                return items.ToList();
-            }
-        }
-
-        public class Chessboard : Scopes.ChessBoard
+        public class ChessBoard
         {
             public List<string> Logs { get; set; }
             public Dictionary<Coordinate, Piece> PieceByCoordinate { get; set; }
-            [DefaultValue(true)] public bool IsWhitesTurn { get; set; }
-
-            public Chessboard()
-            {
-                Logs = new List<string>();
-                PieceByCoordinate = new Dictionary<Coordinate, Piece>();
-                IsWhitesTurn = true;
-            }
+            public bool IsWhitesTurn { get; set; }
 
             public void NextMove(string originInput, string destinationInput)
             {
+                Logs = new List<string>();
                 var origin = new Coordinate(originInput[0].ToString(), Mappings.ToNum(originInput[1].ToString()));
                 if (!PieceByCoordinate.TryGetValue(origin, out var piece))
                     Logs.Add(Utils.GetMessage(Errors.EmptySelection));
@@ -373,6 +271,47 @@ namespace Chess
                 });
             }
         }
+
+        public class IO
+        {
+            ChessBoard Board { get; set; }
+
+            void Resume(List<ImportExport> items)
+            {
+                Board.PieceByCoordinate.Clear();
+                items.ForEach(item => Board.PieceByCoordinate.Add(new Coordinate(item.Letter, item.Number), new Piece(item.Color, item.Kind)));
+            }
+
+            List<ImportExport> PiecesList() => Board.PieceByCoordinate.Select(x =>
+                                                new ImportExport
+                                                {
+                                                    Letter = x.Key.Letter,
+                                                    Number = x.Key.Number,
+                                                    Kind = x.Value.Kind,
+                                                    Color = x.Value.Color
+                                                }).ToList();
+
+            List<ImportExport> PiecesListWithEmptyCells()
+            {
+                var items = PiecesList();
+                Enumerable.Range(1, 8).ToList().ForEach(i =>
+                {
+                    Enumerable.Range(1, 8).ToList().ForEach(j =>
+                    {
+                        var coordinate = new Coordinate(i, j);
+                        if (!items.Any(x => x.Letter == coordinate.Letter && x.Number == coordinate.Number))
+                            items.Add(new ImportExport
+                            {
+                                Letter = coordinate.Letter,
+                                Number = coordinate.Number,
+                                Kind = Pieces.NoPiece,
+                                Color = Colors.NoColor
+                            });
+                    });
+                });
+                return items.ToList();
+            }
+        }
     }
 
     public class Chess
@@ -394,14 +333,35 @@ namespace Chess
                 }
                 Console.Write("|");
             }
+            Console.WriteLine("");
         }
 
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            var chessBoard = new Scopes.Chessboard();
+            var chessBoard = new Scopes.ChessBoard();
+            chessBoard.Logs = new List<string>();
             chessBoard.InitializeBoard();
             PrintBoard(chessBoard.PieceByCoordinate);
+            chessBoard.IsWhitesTurn = true;
+            while (chessBoard.PieceByCoordinate.ContainsValue(new Piece(Colors.White, Pieces.King)) && chessBoard.PieceByCoordinate.ContainsValue(new Piece(Colors.Black, Pieces.King)))
+            {
+                string firstInput = Console.ReadLine();
+                string secondInput = Console.ReadLine();
+
+                if (firstInput.Length < 2 || secondInput.Length < 2)
+                {
+                    Console.WriteLine(Utils.GetMessage(Errors.InvalidLength));
+                }
+                else
+                {
+                    chessBoard.NextMove(firstInput, secondInput);
+                }
+
+                chessBoard.Logs.ForEach(Console.WriteLine);
+                PrintBoard(chessBoard.PieceByCoordinate);
+            }
+            Console.WriteLine(Utils.GetMessage(Messages.WinnerMessage, chessBoard.IsWhitesTurn == true? Colors.Black: Colors.White));
         }
     }
 }
