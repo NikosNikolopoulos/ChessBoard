@@ -141,7 +141,7 @@ ChessBoard/
 
 - **Constants/:** Contains the enumerations used in the application.
 - **Coordinates/:** Manages coordinate-related functionality.
-- **GameLogic/:** Contains utility functions, the `ImportExport` record, and static methods for checking legal moves and piece paths.
+- **Logic/:** Contains utility functions, the `ImportExport` record, and static methods for checking legal moves and piece paths.
 - **Board/:** Manages the `ChessBoard` class and related functionality.
 - **IO/:** Handles input/output operations.
 - **Program/:** Contains the main program logic.
